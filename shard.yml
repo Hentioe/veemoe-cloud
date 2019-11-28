@@ -9,3 +9,13 @@ targets:
     main: src/veemoe_storage.cr
 
 crystal: 0.31.1
+
+dependencies:
+  clicr:
+    github: j8r/clicr
+  digests:
+    github: Hentioe/digests.cr
+  sam:
+    github: imdrasil/sam.cr
+  kemal:
+    github: kemalcr/kemal
