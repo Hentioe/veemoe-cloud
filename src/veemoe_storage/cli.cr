@@ -9,34 +9,38 @@ module VeemoeStorage::CLI
         action: {{action}},
         variables: {
           port: {
-            info:     "Web server port",
-            default:  8080,
+            info:    "Web server port",
+            default: 8080,
           },
           log_level: {
-            info:     "Log level",
-            default:  "info",
+            info:    "Log level",
+            default: "info",
           },
-          root: {
-            info:     "Resources root path",
-            default:  "./_res",
+          res_path: {
+            info:    "Resource path",
+            default: "./_res",
+          },
+          cache_path: {
+            info:    "Cache path",
+            default: "./_cache",
           }
         },
         options: {
           prod: {
-            info:     "Running in prod mode",
-          }
+            info: "Running in prod mode",
+          },
         }
       )
     end
 
     begin
-        cli_run unless {{exclude}}
+      cli_run unless {{exclude}}
     rescue ex : Clicr::Help
-        puts ex; exit 0
+      puts ex; exit 0
     rescue ex : Clicr::ArgumentRequired | Clicr::UnknownCommand | Clicr::UnknownOption | Clicr::UnknownVariable
-        abort ex
+      abort ex
     rescue ex
-        raise ex
+      raise ex
     end
   end
 end
