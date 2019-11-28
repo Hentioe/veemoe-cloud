@@ -1,0 +1,11 @@
+name: veemoe_storage
+version: 0.1.0
+
+authors:
+  - Hentioe <me@bluerain.io>
+
+targets:
+  veemoe_storage:
+    main: src/veemoe_storage.cr
+
+crystal: 0.31.1
