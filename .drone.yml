@@ -3,7 +3,7 @@ name: default
 
 steps:
   - name: app-test
-    image: bluerain/veemod-cloud:build
+    image: bluerain/veemoe-cloud:build
     pull: true
     commands:
       - shards --production
@@ -16,7 +16,7 @@ steps:
       - npm run deploy --prefix ./assets
 
   - name: app-build
-    image: bluerain/veemod-cloud:build
+    image: bluerain/veemoe-cloud:build
     pull: true
     commands:
       - shards build --release --progress --production --warnings=all
@@ -26,7 +26,7 @@ steps:
   - name: app-image-push
     image: plugins/docker
     settings:
-      repo: bluerain/veemod-cloud
+      repo: bluerain/veemoe-cloud
       username: bluerain
       password:
         from_secret: docker_password
