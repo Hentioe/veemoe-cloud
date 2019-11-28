@@ -1,4 +1,4 @@
-FROM bluerain/veemod-cloud:runtime
+FROM bluerain/veemoe-cloud:runtime
 
 
 ARG APP_HOME=/home/veemoe_storage
