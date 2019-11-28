@@ -1,0 +1,39 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: app-test
+    image: bluerain/veemod-cloud:build
+    pull: true
+    commands:
+      - shards --production
+      - VEEMOE_STORAGE_ENV=test crystal spec
+
+  - name: assets-build
+    image: node:stretch
+    commands:
+      - npm install --prefix ./assets
+      - npm run deploy --prefix ./assets
+
+  - name: app-build
+    image: bluerain/veemod-cloud:build
+    pull: true
+    commands:
+      - shards build --release --progress --production --warnings=all
+      - crystal sam.cr -- digests:make
+      - crystal sam.cr -- digests:clean_undigested
+
+  - name: app-image-push
+    image: plugins/docker
+    settings:
+      repo: bluerain/veemod-cloud
+      username: bluerain
+      password:
+        from_secret: docker_password
+      dockerfile: Dockerfile
+      tags: latest
+    when:
+      branch:
+        - master
+      event:
+        - push
