@@ -19,7 +19,7 @@ steps:
     image: bluerain/veemoe-cloud:build
     pull: true
     commands:
-      - shards build --release --progress --production --warnings=all
+      - shards build -Dpreview_mt --release --progress --production
       - crystal sam.cr -- digests:make
       - crystal sam.cr -- digests:clean_undigested
 
