@@ -15,7 +15,7 @@ const Footer = styled.footer.attrs(() => ({
 export default () => {
   return (
     <Footer>
-      <span>Copyright ©2019 VEEMOE</span>
+      <span>Copyright © 2019 VEEMOE</span>
     </Footer>
   );
 };
