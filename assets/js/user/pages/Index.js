@@ -125,7 +125,10 @@ export default () => {
                 <img src="/display/demo/demo.jpg?processes=resize.w_100" />
               </div>
               <div className="flex justify-start">
-                <img src="/display/demo/demo.jpg?processes=resize.w_150" />
+                <img
+                  className="rounded-bl-lg"
+                  src="/display/demo/demo.jpg?processes=resize.w_150"
+                />
               </div>
             </DemoCardContent>
           </DemoCard>
@@ -157,7 +160,10 @@ export default () => {
                 <img src="/display/demo/demo.jpg?processes=crop.h_60,w_100,y_50,x_80" />
               </div>
               <div className="flex justify-end">
-                <img src="/display/demo/demo.jpg?processes=crop.h_70,w_100,y_100,x_150" />
+                <img
+                  className="rounded-br-lg"
+                  src="/display/demo/demo.jpg?processes=crop.h_70,w_100,y_100,x_150"
+                />
               </div>
             </DemoCardContent>
           </DemoCard>
@@ -172,20 +178,20 @@ export default () => {
               <div className="flex justify-center">
                 <div>
                   <img
-                    className="inline"
+                    className="inline border-r border-b"
                     src="/display/demo/demo.jpg?processes=crop.w_100,h_50"
                   />
                   <img
-                    className="inline"
+                    className="inline border-l border-b"
                     src="/display/demo/demo.jpg?processes=crop.w_200,h_50,x_100"
                   />
                   <br />
                   <img
-                    className="inline"
+                    className="inline border-t border-r"
                     src="/display/demo/demo.jpg?processes=crop.y_50,w_200,h_150,h_150/blur.s_3.5"
                   />
                   <img
-                    className="inline"
+                    className="inline border-l border-t"
                     src="/display/demo/demo.jpg?processes=crop.y_50,x_200,w_100"
                   />
                 </div>
