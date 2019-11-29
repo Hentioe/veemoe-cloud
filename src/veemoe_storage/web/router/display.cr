@@ -163,7 +163,6 @@ module VeemoeStorage
         end
       else
         processes_expr = context.params.query["processes"]? || ""
-        puts processes_expr
         processor_pipe = processes(processes_expr)
         img = ImgKit::Image.new(full_path)
         processor_pipe.each do |processor, args|

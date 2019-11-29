@@ -10,7 +10,7 @@ import "mdn-polyfills/String.prototype.includes";
 import "mdn-polyfills/NodeList.prototype.forEach";
 import "mdn-polyfills/Element.prototype.classList";
 
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { Provider as ReduxProvider, useSelector } from "react-redux";
 import reduxLogger from "redux-logger";
