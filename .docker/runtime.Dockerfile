@@ -1,7 +1,7 @@
 FROM bluerain/crystal:0.31.1-build AS ImageMagick7
 
 ARG MAGICK_VERSION=7.0.9-6
-ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev
+ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libwebp-dev
 
 WORKDIR /home
 
@@ -18,9 +18,9 @@ RUN apt update && \
 FROM bluerain/crystal:runtime-slim
 
 ARG MAGICK_VERSION=7.0.9-6
-ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libxml2-dev
+ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libxml2-dev\ libwebp-dev
 ARG BUILDING_DEPS=make\ gcc\ g++
-ARG DEPS=libevent-pthreads-2.1-6\ libgomp1\ libjpeg62-turbo\ libpng16-16\ libxml2
+ARG DEPS=libevent-pthreads-2.1-6\ libgomp1\ libjpeg62-turbo\ libpng16-16\ libxml2\ libwebp
 
 WORKDIR /home
 
