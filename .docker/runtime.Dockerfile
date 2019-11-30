@@ -5,9 +5,9 @@ ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libwebp-dev
 
 WORKDIR /home
 
-RUN apt update && \
-    apt install wget -y && \
-    apt install $MAGICK_DELEGATE_DEPS -y && \
+RUN apt-get update && \
+    apt-get install wget -y && \
+    apt-get install $MAGICK_DELEGATE_DEPS -y && \
     wget "https://github.com/ImageMagick/ImageMagick/archive/${MAGICK_VERSION}.tar.gz" && \
     tar xvzf "${MAGICK_VERSION}.tar.gz" && \
     cd "ImageMagick-${MAGICK_VERSION}" && \
@@ -20,7 +20,7 @@ FROM bluerain/crystal:runtime-slim
 ARG MAGICK_VERSION=7.0.9-6
 ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libxml2-dev\ libwebp-dev
 ARG BUILDING_DEPS=make\ gcc\ g++
-ARG DEPS=libevent-pthreads-2.1-6\ libgomp1\ libjpeg62-turbo\ libpng16-16\ libxml2\ libwebp
+ARG DEPS=libevent-pthreads-2.1-6\ libgomp1\ libjpeg62-turbo\ libpng16-16\ libxml2\ libwebp6
 
 WORKDIR /home
 
