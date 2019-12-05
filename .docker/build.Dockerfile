@@ -1,6 +1,6 @@
 FROM bluerain/crystal:0.31.1-build AS ImageMagick7
 
-ARG MAGICK_VERSION=7.0.9-6
+ARG MAGICK_VERSION=7.0.9-7
 ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libwebp-dev
 
 WORKDIR /home
@@ -19,7 +19,7 @@ FROM bluerain/crystal:0.31.1-build
 
 WORKDIR /home
 
-ARG MAGICK_VERSION=7.0.9-6
+ARG MAGICK_VERSION=7.0.9-7
 ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libwebp-dev
 
 COPY --from=ImageMagick7 "/home/ImageMagick-${MAGICK_VERSION}" "/home/ImageMagick-${MAGICK_VERSION}"
