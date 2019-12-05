@@ -1,7 +1,7 @@
 require "img_kit"
 require "digest"
 
-module VeemoeStorage
+module VeemoeCloud
   module Router::Display
     extend self
 

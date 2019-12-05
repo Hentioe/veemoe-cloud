@@ -7,7 +7,7 @@ steps:
     pull: true
     commands:
       - shards --production
-      - VEEMOE_STORAGE_ENV=test crystal spec
+      - VEEMOE_CLOUD_ENV=test crystal spec
 
   - name: assets-build
     image: node:stretch

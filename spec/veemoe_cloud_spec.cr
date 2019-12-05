@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-describe VeemoeStorage do
+describe VeemoeCloud do
   # TODO: Write tests
 
   it "works" do

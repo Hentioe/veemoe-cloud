@@ -1,11 +1,11 @@
 require "clicr"
 
-module VeemoeStorage::CLI
+module VeemoeCloud::CLI
   macro def_action(action, exclude = false)
     def cli_run
       Clicr.create(
-        name: "veemoe-storage",
-        info: "Veemoe's storage services",
+        name: "veemoe-cloud",
+        info: "Veemoe's cloud storage services",
         action: {{action}},
         variables: {
           port: {

@@ -1,2 +1,2 @@
 require "spec"
-require "../src/veemoe_storage"
+require "../src/veemoe_cloud"

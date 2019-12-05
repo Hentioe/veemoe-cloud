@@ -1,7 +1,7 @@
 require "kemal"
 require "./web/*"
 
-module VeemoeStorage::Web
+module VeemoeCloud::Web
   def self.start(port : Int, prod : Bool, res_path : String, cache_path : String)
     serve_static({"gzip" => false})
     public_folder "static"
