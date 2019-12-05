@@ -1,12 +1,12 @@
-name: veemoe_storage
+name: veemoe_cloud
 version: 0.1.0
 
 authors:
   - Hentioe <me@bluerain.io>
 
 targets:
-  veemoe_storage:
-    main: src/veemoe_storage.cr
+  veemoe_cloud:
+    main: src/veemoe_cloud.cr
 
 crystal: 0.31.1
 

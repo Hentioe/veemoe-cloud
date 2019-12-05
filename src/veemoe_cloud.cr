@@ -1,11 +1,11 @@
 require "digests"
-require "./veemoe_storage/cli"
-require "./veemoe_storage/logging"
-require "./veemoe_storage/web"
+require "./veemoe_cloud/cli"
+require "./veemoe_cloud/logging"
+require "./veemoe_cloud/web"
 
-VeemoeStorage::CLI.def_action "VeemoeStorage.start", exclude: ENV["VEEMOE_STORAGE_ENV"]? == "test"
+VeemoeCloud::CLI.def_action "VeemoeCloud.start", exclude: ENV["VEEMOE_CLOUD_ENV"]? == "test"
 
-module VeemoeStorage
+module VeemoeCloud
   def self.start(port, log_level, res_path, cache_path, prod)
     # 初始化日志
     Logging.init(log_level)

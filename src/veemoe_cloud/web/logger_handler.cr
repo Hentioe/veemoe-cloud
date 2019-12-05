@@ -1,4 +1,4 @@
-module VeemoeStorage::Web
+module VeemoeCloud::Web
   class LoggerHandler < Kemal::BaseLogHandler
     def initialize(@logger : Logger)
     end

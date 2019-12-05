@@ -1,4 +1,4 @@
-module VeemoeStorage
+module VeemoeCloud
   Router.def :page do
     get "/" do
       render "src/views/user.html.ecr"

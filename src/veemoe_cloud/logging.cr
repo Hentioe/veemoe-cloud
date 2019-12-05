@@ -1,6 +1,6 @@
 require "logger"
 
-module VeemoeStorage::Logging
+module VeemoeCloud::Logging
   @@logger : Logger?
 
   def self.init(level : String)

@@ -1,11 +1,11 @@
 FROM bluerain/veemoe-cloud:runtime
 
 
-ARG APP_HOME=/home/veemoe_storage
+ARG APP_HOME=/home/veemoe_cloud
 
 
 RUN mkdir "$APP_HOME" && \
-    ln -s "$APP_HOME/veemoe_storage" /usr/local/bin/veemoe_storage && \
+    ln -s "$APP_HOME/veemoe_cloud" /usr/local/bin/veemoe_cloud && \
     mkdir /_res && \
     mkdir /_cache
 
@@ -23,7 +23,7 @@ VOLUME ["/_cache"]
 EXPOSE 8080
 
 
-ENV VEEMOE_STORAGE_ENV=prod
+ENV VEEMOE_CLOUD_ENV=prod
 
 
-ENTRYPOINT veemoe_storage --prod res_path=/_res cache_path=/_cache port=8080
+ENTRYPOINT veemoe_cloud --prod res_path=/_res cache_path=/_cache port=8080
