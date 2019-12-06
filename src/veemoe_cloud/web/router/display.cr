@@ -15,11 +15,12 @@ module VeemoeCloud
 
         if cache_request?(context, last_modified)
           context.response.status_code = 304
+          # context.response.headers.delete("content_type")
         else
           send_file context, output
         end
       else
-        processes_expr = context.params.query["processes"]
+        processes_expr = context.params.query["processes"] || ""
         processor_pipe = processes(processes_expr)
         img = ImgKit::Image.new(full_path)
         processor_pipe.each do |processor, args|
