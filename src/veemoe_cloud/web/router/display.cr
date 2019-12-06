@@ -15,7 +15,7 @@ module VeemoeCloud
 
         if cache_request?(context, last_modified)
           context.response.status_code = 304
-          # context.response.headers.delete("content_type")
+          context.response.headers.delete("content_type")
         else
           send_file context, output
         end
