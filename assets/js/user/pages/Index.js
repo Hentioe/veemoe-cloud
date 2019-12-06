@@ -119,15 +119,15 @@ export default () => {
             </DemoCardTitle>
             <DemoCardContent>
               <div className="flex justify-end">
-                <img src="/display/demo/demo.jpg?processes=resize.w_70" />
+                <img src="/display/demo/demo.jpg?processes=resize.w_70/conv.webp" />
               </div>
               <div className="flex justify-center">
-                <img src="/display/demo/demo.jpg?processes=resize.w_100" />
+                <img src="/display/demo/demo.jpg?processes=resize.w_100/conv.webp" />
               </div>
               <div className="flex justify-start">
                 <img
                   className="rounded-bl-lg"
-                  src="/display/demo/demo.jpg?processes=resize.w_150"
+                  src="/display/demo/demo.jpg?processes=resize.w_150/conv.webp"
                 />
               </div>
             </DemoCardContent>
@@ -138,13 +138,13 @@ export default () => {
             </DemoCardTitle>
             <DemoCardContent>
               <div className="flex justify-center">
-                <img src="/display/demo/demo.jpg?processes=resize.w_500,h_80/blur.s_1" />
+                <img src="/display/demo/demo.jpg?processes=resize.w_500,h_80/blur.s_1/conv.webp" />
               </div>
               <div className="flex justify-center">
-                <img src="/display/demo/demo.jpg?processes=resize.w_300,h_80/blur.s_3" />
+                <img src="/display/demo/demo.jpg?processes=resize.w_300,h_80/blur.s_3/conv.webp" />
               </div>
               <div className="flex justify-center">
-                <img src="/display/demo/demo.jpg?processes=resize.w_200,h_80/blur.s_10" />
+                <img src="/display/demo/demo.jpg?processes=resize.w_200,h_80/blur.s_10/conv.webp" />
               </div>
             </DemoCardContent>
           </DemoCard>
@@ -154,15 +154,15 @@ export default () => {
             </DemoCardTitle>
             <DemoCardContent>
               <div className="flex justify-start">
-                <img src="/display/demo/demo.jpg?processes=crop.h_50,w_100,y_50,x_50" />
+                <img src="/display/demo/demo.jpg?processes=crop.h_50,w_100,y_50,x_50/conv.webp" />
               </div>
               <div className="flex justify-center">
-                <img src="/display/demo/demo.jpg?processes=crop.h_60,w_100,y_50,x_80" />
+                <img src="/display/demo/demo.jpg?processes=crop.h_60,w_100,y_50,x_80/conv.webp" />
               </div>
               <div className="flex justify-end">
                 <img
                   className="rounded-br-lg"
-                  src="/display/demo/demo.jpg?processes=crop.h_70,w_100,y_100,x_150"
+                  src="/display/demo/demo.jpg?processes=crop.h_70,w_100,y_100,x_150/conv.webp"
                 />
               </div>
             </DemoCardContent>
@@ -179,20 +179,20 @@ export default () => {
                 <div>
                   <img
                     className="inline border-r border-b"
-                    src="/display/demo/demo.jpg?processes=crop.w_100,h_50"
+                    src="/display/demo/demo.jpg?processes=crop.w_100,h_50/conv.webp"
                   />
                   <img
                     className="inline border-l border-b"
-                    src="/display/demo/demo.jpg?processes=crop.w_200,h_50,x_100"
+                    src="/display/demo/demo.jpg?processes=crop.w_200,h_50,x_100/conv.webp"
                   />
                   <br />
                   <img
                     className="inline border-t border-r"
-                    src="/display/demo/demo.jpg?processes=crop.y_50,w_200,h_150,h_150/blur.s_3.5"
+                    src="/display/demo/demo.jpg?processes=crop.y_50,w_200,h_150,h_150/blur.s_3.5/conv.webp"
                   />
                   <img
                     className="inline border-l border-t"
-                    src="/display/demo/demo.jpg?processes=crop.y_50,x_200,w_100"
+                    src="/display/demo/demo.jpg?processes=crop.y_50,x_200,w_100/conv.webp"
                   />
                 </div>
               </div>

@@ -2,6 +2,41 @@ require "img_kit"
 require "digest"
 
 module VeemoeCloud
+  Router.def :display, _i : String, _o : String do
+    get "/display/:workspace/:path" do |context|
+      workspack, path = {epu("workspace"), epu("path")}
+      full_path = i("#{workspack}/#{path}")
+      hash = sign(full_path, context.request.query)
+      ext = parse_conv(context.params.query["processes"]) || File.extname(full_path)
+      output = o(path, hash, ext)
+      if File.exists?(output)
+        last_modified = modification_time(output)
+        add_cache_headers(context.response.headers, last_modified)
+
+        if cache_request?(context, last_modified)
+          context.response.status_code = 304
+        else
+          send_file context, output
+        end
+      else
+        processes_expr = context.params.query["processes"]
+        processor_pipe = processes(processes_expr)
+        img = ImgKit::Image.new(full_path)
+        processor_pipe.each do |processor, args|
+          process_img(img, processor, args)
+        end
+
+        img.save(output)
+        img.finish
+
+        last_modified = modification_time(output)
+        add_cache_headers(context.response.headers, last_modified)
+
+        send_file context, output
+      end
+    end
+  end
+
   module Router::Display
     extend self
 
@@ -13,8 +48,8 @@ module VeemoeCloud
       "#{_i}/#{{{path}}}"
     end
 
-    macro o(path, hash)
-      "#{_o}/#{{{hash}}}#{File.extname({{path}})}"
+    macro o(path, hash, ext)
+      "#{_o}/#{{{hash}}}#{ext}"
     end
 
     def sign(full_path, params)
@@ -66,6 +101,7 @@ module VeemoeCloud
     RESIZE_PROCESS_MATCH = /resize\..+/
     BLUR_PROCESS_MATCH   = /blur\..+/
     CROP_PROCESS_MATCH   = /crop\..+/
+    CONV_PRECESS_MATCH   = /conv\.([^\/]+)/
 
     def processes(expr)
       pipe =
@@ -86,6 +122,13 @@ module VeemoeCloud
         end
       end
       pipe
+    end
+
+    def parse_conv(query_params)
+      format = CONV_PRECESS_MATCH.match(query_params).try &.[1]
+      if format
+        ".#{format}"
+      end
     end
 
     def parse_resize_process(expr)
@@ -142,40 +185,6 @@ module VeemoeCloud
         if args.is_a?(CropArgs)
           img.crop(**args)
         end
-      end
-    end
-  end
-
-  Router.def :display, _i : String, _o : String do
-    get "/display/:workspace/:path" do |context|
-      workspack, path = {epu("workspace"), epu("path")}
-      full_path = i("#{workspack}/#{path}")
-      hash = sign(full_path, context.request.query)
-      output = o(path, hash)
-      if File.exists?(output)
-        last_modified = modification_time(output)
-        add_cache_headers(context.response.headers, last_modified)
-
-        if cache_request?(context, last_modified)
-          context.response.status_code = 304
-        else
-          send_file context, output
-        end
-      else
-        processes_expr = context.params.query["processes"]? || ""
-        processor_pipe = processes(processes_expr)
-        img = ImgKit::Image.new(full_path)
-        processor_pipe.each do |processor, args|
-          process_img(img, processor, args)
-        end
-
-        img.save(output)
-        img.finish
-
-        last_modified = modification_time(output)
-        add_cache_headers(context.response.headers, last_modified)
-
-        send_file context, output
       end
     end
   end
