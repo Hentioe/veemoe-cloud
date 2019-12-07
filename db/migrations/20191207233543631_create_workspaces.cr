@@ -8,7 +8,7 @@ class CreateWorkspaces < Jennifer::Migration::Base
       t.timestamps
     end
 
-    add_index(:workspaces, [:name], :unique)
+    add_index :workspaces, [:name], :unique
   end
 
   def down
