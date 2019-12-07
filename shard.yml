@@ -21,3 +21,6 @@ dependencies:
     github: kemalcr/kemal
   img_kit:
     github: Hentioe/imgkit.cr
+  jennifer:
+    github: imdrasil/jennifer.cr
+    version: "~> 0.8.4"
