@@ -28,6 +28,19 @@
             "problemMatcher": []
         },
         {
+            "label": "db: reset",
+            "type": "process",
+            "command": "crystal",
+            "args": [
+                "sam.cr",
+                "--",
+                "db:drop",
+                "@",
+                "db:setup"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "assets: watching",
             "type": "npm",
             "script": "watch",
