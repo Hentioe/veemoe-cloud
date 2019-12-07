@@ -20,7 +20,7 @@ FROM bluerain/crystal:runtime-slim
 ARG MAGICK_VERSION=7.0.9-7
 ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libxml2-dev\ libwebp-dev
 ARG BUILDING_DEPS=make\ gcc\ g++
-ARG DEPS=libevent-pthreads-2.1-6\ libgomp1\ libjpeg62-turbo\ libpng16-16\ libxml2\ libwebp6\ libwebpdemux2\ libwebpmux3
+ARG DEPS=libevent-pthreads-2.1-6\ libgomp1\ libjpeg62-turbo\ libpng16-16\ libxml2\ libwebp6\ libwebpdemux2\ libwebpmux3\ libsqlite3-0
 
 WORKDIR /home
 
