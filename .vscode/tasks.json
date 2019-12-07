@@ -5,20 +5,26 @@
     "tasks": [
         {
             "label": "starting",
-            "type": "crystal",
-            "command": "run",
-            "file": "src/veemoe_cloud.cr",
+            "type": "process",
+            "command": "crystal",
+            "args": [
+                "run",
+                "src/veemoe_cloud.cr"
+            ],
             "problemMatcher": []
         },
         {
             "label": "testing",
-            "type": "crystal",
+            "type": "process",
+            "command": "crystal",
             "options": {
                 "env": {
                     "VEEMOE_CLOUD_ENV": "test"
                 }
             },
-            "command": "spec",
+            "args": [
+                "spec"
+            ],
             "problemMatcher": []
         },
         {
