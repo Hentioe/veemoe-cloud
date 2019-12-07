@@ -37,8 +37,8 @@ shards:
     version: 0.8.4
 
   jennifer_sqlite3_adapter:
-    github: imdrasil/jennifer_sqlite3_adapter
-    version: 0.2.2
+    github: Hentioe/jennifer_sqlite3_adapter
+    commit: 58a8dd74279f3d3e6cfbeb14384e40657c96ad9a
 
   kemal:
     github: kemalcr/kemal
