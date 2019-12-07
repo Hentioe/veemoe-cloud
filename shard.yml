@@ -24,3 +24,6 @@ dependencies:
   jennifer:
     github: imdrasil/jennifer.cr
     version: "~> 0.8.4"
+  jennifer_sqlite3_adapter:
+    github: imdrasil/jennifer_sqlite3_adapter
+    version: 0.2.2

@@ -4,6 +4,10 @@ shards:
     github: j8r/clicr
     version: 0.7.0
 
+  db:
+    github: crystal-lang/crystal-db
+    version: 0.7.0
+
   digests:
     github: Hentioe/digests.cr
     commit: b62d1272fd204e1c72be58f8a8338c77a66e1e5c
@@ -32,6 +36,10 @@ shards:
     github: imdrasil/jennifer.cr
     version: 0.8.4
 
+  jennifer_sqlite3_adapter:
+    github: imdrasil/jennifer_sqlite3_adapter
+    version: 0.2.2
+
   kemal:
     github: kemalcr/kemal
     version: 0.26.1
@@ -47,4 +55,8 @@ shards:
   sam:
     github: imdrasil/sam.cr
     version: 0.3.2
+
+  sqlite3:
+    github: crystal-lang/crystal-sqlite3
+    version: 0.14.0
 

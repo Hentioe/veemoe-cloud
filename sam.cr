@@ -1,4 +1,7 @@
+require "./config/*"
 require "sam"
+
+load_dependencies "jennifer"
 load_dependencies "digests"
 
 # Here you can define your tasks
