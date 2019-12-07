@@ -12,13 +12,29 @@ shards:
     github: crystal-loot/exception_page
     version: 0.1.2
 
+  i18n:
+    github: TechMagister/i18n.cr
+    version: 0.3.1
+
+  ifrit:
+    github: imdrasil/ifrit
+    version: 0.1.2
+
   img_kit:
     github: Hentioe/imgkit.cr
     commit: 787e374e372e68ae64814f8247e82d6ebbc47b47
 
+  inflector:
+    github: phoffer/inflector.cr
+    version: 0.1.8
+
+  jennifer:
+    github: imdrasil/jennifer.cr
+    version: 0.8.4
+
   kemal:
     github: kemalcr/kemal
-    version: 0.26.0
+    version: 0.26.1
 
   kilt:
     github: jeromegn/kilt
