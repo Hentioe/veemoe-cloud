@@ -19,9 +19,20 @@ steps:
     image: bluerain/veemoe-cloud:build
     pull: true
     commands:
-      - shards build -Dpreview_mt --release --progress --production
+      - shards build veemoe_cloud -Dpreview_mt --release --progress --production
       - crystal sam.cr -- digests:make
       - crystal sam.cr -- digests:clean_undigested
+
+  - name: sam-build
+    image: bluerain/veemoe-cloud:build
+    pull: true
+    commands:
+      - shards build sam --release --progress --production
+    when:
+      branch:
+        - sam/update
+      event:
+        - push
 
   - name: app-image-push
     image: plugins/docker
@@ -35,5 +46,20 @@ steps:
     when:
       branch:
         - master
+      event:
+        - push
+
+  - name: sam-image-push
+    image: plugins/docker
+    settings:
+      repo: bluerain/veemoe-cloud
+      username: bluerain
+      password:
+        from_secret: docker_password
+      dockerfile: sam.Dockerfile
+      tags: sam
+    when:
+      branch:
+        - sam/update
       event:
         - push

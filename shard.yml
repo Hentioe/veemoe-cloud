@@ -7,6 +7,8 @@ authors:
 targets:
   veemoe_cloud:
     main: src/veemoe_cloud.cr
+  sam:
+    main: sam.cr
 
 crystal: 0.31.1
 
