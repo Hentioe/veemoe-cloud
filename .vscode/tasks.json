@@ -4,14 +4,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Starting",
+            "label": "starting",
             "type": "crystal",
             "command": "run",
             "file": "src/veemoe_cloud.cr",
             "problemMatcher": []
         },
         {
-            "label": "Testing",
+            "label": "testing",
             "type": "crystal",
             "options": {
                 "env": {
@@ -22,15 +22,25 @@
             "problemMatcher": []
         },
         {
-            "label": "Assets watching",
-            "type": "process",
-            "command": "npm",
-            "args": [
-                "run",
-                "watch",
-                "--prefix=assets"
-            ],
-            "problemMatcher": [],
+            "label": "assets: watching",
+            "type": "npm",
+            "script": "watch",
+            "path": "assets/",
+            "problemMatcher": []
+        },
+        {
+            "label": "assets: deploy",
+            "type": "npm",
+            "script": "deploy",
+            "path": "assets/",
+            "problemMatcher": []
+        },
+        {
+            "label": "assets: deps install",
+            "type": "npm",
+            "script": "install",
+            "path": "assets/",
+            "problemMatcher": []
         }
     ]
 }
