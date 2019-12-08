@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS "pipes"(id integer PRIMARY KEY, name text NOT NULL, q
 CREATE UNIQUE INDEX pipes_workspace_id_name_idx ON pipes (workspace_id,name);
 CREATE TABLE IF NOT EXISTS "styles"(id integer PRIMARY KEY, name text NOT NULL, description text NOT NULL, workspace_id integer NOT NULL, created_at text NOT NULL, updated_at text NOT NULL,FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON UPDATE RESTRICT ON DELETE CASCADE);
 CREATE UNIQUE INDEX styles_workspace_id_name_idx ON styles (workspace_id,name);
-CREATE TABLE pipes_styles (style_id integer, pipe_id integer);
-CREATE TABLE matches_styles (style_id integer, match_id integer);
+CREATE TABLE IF NOT EXISTS "pipes_styles"(pipe_id integer NOT NULL, style_id integer NOT NULL,FOREIGN KEY (pipe_id) REFERENCES pipes(id) ON UPDATE RESTRICT ON DELETE CASCADE,FOREIGN KEY (style_id) REFERENCES styles(id) ON UPDATE RESTRICT ON DELETE CASCADE);
+CREATE TABLE IF NOT EXISTS "matches_styles"(match_id integer NOT NULL, style_id integer NOT NULL,FOREIGN KEY (match_id) REFERENCES matches(id) ON UPDATE RESTRICT ON DELETE CASCADE,FOREIGN KEY (style_id) REFERENCES styles(id) ON UPDATE RESTRICT ON DELETE CASCADE);
