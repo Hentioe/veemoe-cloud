@@ -7,6 +7,8 @@ steps:
     pull: true
     commands:
       - shards --production
+      - mkdir data
+      - VEEMOE_CLOUD_ENV=test crystal sam.cr -- db:setup
       - VEEMOE_CLOUD_ENV=test crystal spec
 
   - name: assets-build
