@@ -25,6 +25,29 @@
             "args": [
                 "spec"
             ],
+            "dependsOn": [
+                "db: reset(test)"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "db: reset(test)",
+            "type": "process",
+            "command": "crystal",
+            "options": {
+                "env": {
+                    "VEEMOE_CLOUD_ENV": "test"
+                }
+            },
+            "args": [
+                "sam.cr",
+                "--",
+                "db:create",
+                "@",
+                "db:drop",
+                "@",
+                "db:setup"
+            ],
             "problemMatcher": []
         },
         {
@@ -34,6 +57,8 @@
             "args": [
                 "sam.cr",
                 "--",
+                "db:create",
+                "@",
                 "db:drop",
                 "@",
                 "db:setup"
