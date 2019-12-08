@@ -1,5 +1,8 @@
 require "./spec_helper"
 
+alias Style = VeemoeCloud::Business::Style
+alias Workspace = VeemoeCloud::Business::Workspace
+
 describe VeemoeCloud do
   it "works" do
     true.should eq(true)
@@ -13,36 +16,67 @@ describe VeemoeCloud do
   end
 
   describe VeemoeCloud::Business::Workspace do
-    it "find_by_name" do
-      demo_space = VeemoeCloud::Business::Workspace.find_by_name("demo")
-      demo_space.should be_nil
-    end
-
-    space = VeemoeCloud::Business::Workspace.create!({:name => "test-space", :description => "测试空间"})
+    space = Workspace.create!({:name => "test-space", :description => "测试空间"})
     space.should be_truthy
     space.name.should eq("test-space")
     space.description.should eq("测试空间")
 
     begin
-      VeemoeCloud::Business::Workspace.create!({:name => "demo", :description => "将要创建失败的空间。"})
+      Workspace.create!({:name => "demo", :description => "将要创建失败的空间。"})
     rescue e
       e.message.should eq("Unable to create directory '_res/demo': File exists")
+      space = Workspace.find_by_name("demo")
+      space.should be_falsey
     end
 
-    space = VeemoeCloud::Business::Workspace.find_by_name("demo")
-    space.should be_falsey
-
-    space = VeemoeCloud::Business::Workspace.find_by_name("test-space")
+    space = Workspace.find_by_name("test-space")
     space.should be_truthy
 
-    VeemoeCloud::Business::Workspace.update!(space.not_nil!, {:name => "test-space1"})
+    Workspace.update!(space.not_nil!, {:name => "test-space1"})
     File.exists?("_res/test-space1").should be_true
 
-    VeemoeCloud::Business::Workspace.delete!("test-space1")
+    Workspace.delete!(space.not_nil!)
 
-    space = VeemoeCloud::Business::Workspace.find_by_name("test-space1")
+    space = Workspace.find_by_name("test-space1")
     space.should be_falsey
 
     File.exists?("_res/test-space1").should be_false
+  end
+
+  describe VeemoeCloud::Business::Style do
+    begin
+      Style.create!({:name => "style-1", :description => "无", :workspace_id => 0})
+    rescue e
+      e.message.not_nil!.should start_with("FOREIGN KEY constraint failed.")
+    end
+
+    space = Workspace.create!({:name => "test-space", :description => "测试空间"})
+    style = Style.create!({:name => "style-1", :description => "无", :workspace_id => space.id})
+
+    style.name.should eq("style-1")
+    style.description.should eq("无")
+
+    style.should be_truthy
+
+    Style.update!(style, {:name => "updated_style", :description => "更新后的描述。"})
+    style.name.should eq("updated_style")
+    style.description.should eq("更新后的描述。")
+
+    style = Style.find_by_name("updated_style")
+    style.should be_truthy
+
+    Style.delete(style.not_nil!)
+
+    style = Style.find_by_name("updated_style")
+    style.should be_nil
+
+    style2 = Style.create!({:name => "style-2", :description => "无", :workspace_id => space.id})
+    style2 = Style.find_by_name("style-2")
+    style2.should be_truthy
+
+    Workspace.delete!(space)
+
+    style2 = Style.find_by_name("style-2")
+    style2.should be_nil
   end
 end
