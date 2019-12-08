@@ -3,17 +3,21 @@ class CreateStyles < Jennifer::Migration::Base
     create_table :styles do |t|
       t.string :name, {:null => false}
       t.string :description, {:null => false}
-      t.integer :workspace_id, {:null => false}
+
+      t.reference :workspace, :integer, {:null => false, :on_delete => :cascade}
 
       t.timestamps
     end
 
-    add_foreign_key :styles, :workspaces, column: :workspace_id, primary_key: :id, on_delete: :cascade
     add_index :styles, [:name], :unique
+    create_join_table :styles, :pipes
+    create_join_table :styles, :matches
   end
 
   def down
     drop_index :styles, [:name]
     drop_table :styles if table_exists? :styles
+    drop_join_table :styles, :pipes
+    drop_join_table :styles, :matches
   end
 end
