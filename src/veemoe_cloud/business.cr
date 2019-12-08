@@ -23,3 +23,27 @@ module VeemoeCloud::Business
 end
 
 require "./business/*"
+
+module VeemoeCloud::Business
+  private macro defdelegate(name, *args, to method)
+    def self.{{name.id}}(*args, **options)
+      {{method.id}}(*args, **options)
+    end
+  end
+
+  defdelegate :create_workspace!, to: Workspace.create!
+  defdelegate :update_workspace!, to: Workspace.update!
+  defdelegate :delete_workspace!, to: Workspace.delete!
+
+  defdelegate :create_style!, to: Style.create!
+  defdelegate :update_style!, to: Style.update!
+  defdelegate :delete_style, to: Style.delete
+
+  defdelegate :create_pipe!, to: Pipe.create!
+  defdelegate :update_pipe!, to: Pipe.update!
+  defdelegate :delete_pipe, to: Pipe.delete
+
+  defdelegate :create_match!, to: Match.create!
+  defdelegate :update_match!, to: Match.update!
+  defdelegate :delete_match, to: Match.delete
+end

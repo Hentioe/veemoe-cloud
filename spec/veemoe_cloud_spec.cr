@@ -1,5 +1,6 @@
 require "./spec_helper"
 
+alias Business = VeemoeCloud::Business
 alias Style = VeemoeCloud::Business::Style
 alias Workspace = VeemoeCloud::Business::Workspace
 alias Pipe = VeemoeCloud::Business::Pipe
@@ -48,7 +49,7 @@ describe VeemoeCloud do
       e.message.not_nil!.should start_with("FOREIGN KEY constraint failed.")
     end
 
-    space = Workspace.create!({:name => "test-space", :description => "测试空间"})
+    space = Business.create_workspace!({:name => "test-space", :description => "测试空间"})
     style = Style.create!({:name => "style-1", :description => "无", :workspace_id => space.id})
 
     style.should be_truthy
@@ -69,13 +70,13 @@ describe VeemoeCloud do
     style.should be_nil
 
     # 测试创建和更新关联项目（管道和匹配）
-    pipe1 = Pipe.create!({:name => "pipe-1", :query_params => "q-1", :workspace_id => space.id})
-    pipe2 = Pipe.create!({:name => "pipe-2", :query_params => "q-2", :workspace_id => space.id})
+    pipe1 = Business.create_pipe!({:name => "pipe-1", :query_params => "q-1", :workspace_id => space.id})
+    pipe2 = Business.create_pipe!({:name => "pipe-2", :query_params => "q-2", :workspace_id => space.id})
 
     pipes = [{:id => pipe1.id}, {:id => pipe2.id}]
 
-    match1 = Match.create!({:expression => "/*", :workspace_id => space.id})
-    match2 = Match.create!({:expression => "/10001/*", :workspace_id => space.id})
+    match1 = Business.create_match!({:expression => "/*", :workspace_id => space.id})
+    match2 = Business.create_match!({:expression => "/10001/*", :workspace_id => space.id})
 
     pipes = [pipe1.id, pipe2.id]
     matches = [match1.id, match2.id]
@@ -86,8 +87,8 @@ describe VeemoeCloud do
     style2.pipes.size.should eq(2)
     style2.matches.size.should eq(2)
 
-    pipe3 = Pipe.create!({:name => "pipe-3", :query_params => "q-3", :workspace_id => space.id})
-    match3 = Match.create!({:expression => "/10002/*", :workspace_id => space.id})
+    pipe3 = Business.create_pipe!({:name => "pipe-3", :query_params => "q-3", :workspace_id => space.id})
+    match3 = Business.create_match!({:expression => "/10002/*", :workspace_id => space.id})
 
     new_pipes = [pipe1.id, pipe3.id]
     new_matches = [match1.id, match3.id]
@@ -106,7 +107,7 @@ describe VeemoeCloud do
       e.message.not_nil!.should start_with("UNIQUE constraint failed: styles.workspace_id, styles.name.")
     end
 
-    Workspace.delete!(space)
+    Business.delete_workspace!(space)
 
     style2 = Style.find_by_name("style-2")
     style2.should be_nil
@@ -118,7 +119,7 @@ describe VeemoeCloud do
     rescue e
       e.message.not_nil!.should start_with("FOREIGN KEY constraint failed.")
     end
-    space = Workspace.create!({:name => "test-space", :description => "测试空间"})
+    space = Business.create_workspace!({:name => "test-space", :description => "测试空间"})
     pipe = Pipe.create!({:name => "pipe-1", :query_params => "q-1", :workspace_id => space.id})
 
     pipe.should be_truthy
@@ -149,7 +150,7 @@ describe VeemoeCloud do
       e.message.not_nil!.should start_with("UNIQUE constraint failed: pipes.workspace_id, pipes.name.")
     end
 
-    Workspace.delete!(space)
+    Business.delete_workspace!(space)
 
     Pipe.find_by_name("pipe-2").should be_nil
   end
@@ -160,7 +161,7 @@ describe VeemoeCloud do
     rescue e
       e.message.not_nil!.should start_with("FOREIGN KEY constraint failed.")
     end
-    space = Workspace.create!({:name => "test-space", :description => "测试空间"})
+    space = Business.create_workspace!({:name => "test-space", :description => "测试空间"})
     match = Match.create!({:expression => "/*", :workspace_id => space.id})
 
     match.should be_truthy
@@ -179,6 +180,6 @@ describe VeemoeCloud do
       e.message.not_nil!.should start_with("UNIQUE constraint failed: matches.workspace_id, matches.expression.")
     end
 
-    Workspace.delete!(space)
+    Business.delete_workspace!(space)
   end
 end
