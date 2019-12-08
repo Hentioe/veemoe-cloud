@@ -8,6 +8,9 @@ Jennifer::Config.configure do |conf|
 
   env = ENV["VEEMOE_CLOUD_ENV"]? || "dev"
   conf.host = ENV["VEEMOE_CLOUD_DATABASE_HOST"]? || "./data"
+
+  FileUtils.mkdir(conf.host) unless File.exists?(conf.host)
+
   conf.db = "#{env}.db"
 
   level = env == "prod" ? Logger::INFO : Logger::DEBUG
