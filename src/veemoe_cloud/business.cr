@@ -8,7 +8,7 @@ module VeemoeCloud::Business
       alias {{module_name.id}} = Model::{{module_name.id}}
 
       def self.get(id : Int32)
-        Model::{{module_name.id}}.get(id)
+        Model::{{module_name.id}}.find(id)
       end
 
       {% if options[:by_name] == true %}

@@ -9,11 +9,11 @@ class CreatePipes < Jennifer::Migration::Base
       t.timestamps
     end
 
-    add_index :pipes, [:name], :unique
+    add_index :pipes, [:workspace_id, :name], :unique
   end
 
   def down
-    drop_index :pipes, [:name]
+    drop_index :pipes, [:workspace_id, :name]
     drop_table :pipes if table_exists? :pipes
   end
 end

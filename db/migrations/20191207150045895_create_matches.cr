@@ -8,11 +8,11 @@ class CreateMatches < Jennifer::Migration::Base
       t.timestamps
     end
 
-    add_index :matches, [:expression], :unique
+    add_index :matches, [:workspace_id, :expression], :unique
   end
 
   def down
-    drop_index :matches, [:expression]
+    drop_index :matches, [:workspace_id, :expression]
     drop_table :matches if table_exists? :matches
   end
 end

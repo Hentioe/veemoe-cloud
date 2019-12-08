@@ -2,10 +2,10 @@ CREATE TABLE migration_versions (id integer PRIMARY KEY AUTOINCREMENT, version t
 CREATE TABLE workspaces (id integer PRIMARY KEY AUTOINCREMENT, name text NOT NULL, description text NOT NULL, is_protected integer NOT NULL DEFAULT true, created_at text NOT NULL, updated_at text NOT NULL);
 CREATE UNIQUE INDEX workspaces_name_idx ON workspaces (name);
 CREATE TABLE IF NOT EXISTS "matches"(id integer PRIMARY KEY, expression text NOT NULL, workspace_id integer NOT NULL, created_at text NOT NULL, updated_at text NOT NULL,FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON UPDATE RESTRICT ON DELETE CASCADE);
-CREATE UNIQUE INDEX matches_expression_idx ON matches (expression);
+CREATE UNIQUE INDEX matches_workspace_id_expression_idx ON matches (workspace_id,expression);
 CREATE TABLE IF NOT EXISTS "pipes"(id integer PRIMARY KEY, name text NOT NULL, query_params text NOT NULL, workspace_id integer NOT NULL, created_at text NOT NULL, updated_at text NOT NULL,FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON UPDATE RESTRICT ON DELETE CASCADE);
-CREATE UNIQUE INDEX pipes_name_idx ON pipes (name);
+CREATE UNIQUE INDEX pipes_workspace_id_name_idx ON pipes (workspace_id,name);
 CREATE TABLE IF NOT EXISTS "styles"(id integer PRIMARY KEY, name text NOT NULL, description text NOT NULL, workspace_id integer NOT NULL, created_at text NOT NULL, updated_at text NOT NULL,FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON UPDATE RESTRICT ON DELETE CASCADE);
-CREATE UNIQUE INDEX styles_name_idx ON styles (name);
+CREATE UNIQUE INDEX styles_workspace_id_name_idx ON styles (workspace_id,name);
 CREATE TABLE pipes_styles (style_id integer, pipe_id integer);
 CREATE TABLE matches_styles (style_id integer, match_id integer);
