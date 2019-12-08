@@ -11,4 +11,11 @@ describe VeemoeCloud do
       format.should eq(".webp")
     end
   end
+
+  describe VeemoeCloud::Business::Workspace do
+    it "find_by_name" do
+      demo_space = VeemoeCloud::Business::Workspace.find_by_name("demo")
+      demo_space.should be_nil
+    end
+  end
 end

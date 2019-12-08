@@ -3,6 +3,7 @@ require "./veemoe_cloud/cli"
 require "./veemoe_cloud/logging"
 require "./veemoe_cloud/web"
 require "./veemoe_cloud/mime_types"
+require "./veemoe_cloud/business"
 
 VeemoeCloud::CLI.def_action "VeemoeCloud.start", exclude: ENV["VEEMOE_CLOUD_ENV"]? == "test"
 
