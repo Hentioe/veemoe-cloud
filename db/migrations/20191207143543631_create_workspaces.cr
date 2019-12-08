@@ -3,7 +3,7 @@ class CreateWorkspaces < Jennifer::Migration::Base
     create_table :workspaces do |t|
       t.string :name, {:null => false}
       t.string :description, {:null => false}
-      t.bool :protected, {:null => false, :default => true}
+      t.bool :is_protected, {:null => false, :default => true}
 
       t.timestamps
     end
