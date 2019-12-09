@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import clsx from "clsx";
 
@@ -23,12 +24,20 @@ const Nav = styled.nav.attrs(({ scrolled, headerHidden }) => ({
 
 const Logo = () => {
   return (
-    <a href="/" className="font-normal text-2xl">
+    <Link to="/" className="font-normal text-2xl">
       <span>Veemoe</span>
       <span className="tracking-tight text-blue-500">Cloud</span>
-    </a>
+    </Link>
   );
 };
+
+const MenuItem = styled(Link).attrs(() => ({
+  className: clsx(
+    ["text-gray-800", "hover:bg-gray-100"],
+    ["p-4"],
+    ["rounded-full"]
+  )
+}))``;
 
 export default ({ headerHidden }) => {
   // 滚动状态
@@ -46,6 +55,10 @@ export default ({ headerHidden }) => {
       <Nav scrolled={scrolled} headerHidden={headerHidden}>
         {/* LOGO */}
         <Logo />
+        {/* Menu */}
+        <div>
+          <MenuItem to="/login">登录</MenuItem>
+        </div>
       </Nav>
     </header>
   );
