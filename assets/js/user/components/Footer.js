@@ -18,7 +18,7 @@ export default () => {
       <div className="flex justify-between">
         <span className="font-mono">Copyright © 2019 VEEMOE</span>
         <a href="https://github.com/Hentioe/veemoe-cloud" target="_blank">
-          <i class="fab fa-github fa-lg" />
+          <i className="fab fa-github fa-lg" />
         </a>
       </div>
     </Footer>

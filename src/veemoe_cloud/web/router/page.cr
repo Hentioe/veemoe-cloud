@@ -4,6 +4,10 @@ module VeemoeCloud
       render "src/views/user.html.ecr"
     end
 
+    get "/*" do
+      render "src/views/user.html.ecr"
+    end
+
     error 404 do
       "Not Found"
     end

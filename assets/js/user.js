@@ -23,6 +23,7 @@ import { HelmetProvider } from "react-helmet-async";
 import Header, { MainContainer } from "./user/components/Header";
 import Footer from "./user/components/Footer";
 import Index from "./user/pages/Index";
+import Login from "./user/pages/Login";
 
 // 创建 Redux Store
 import Reducers from "./user/reducers";
@@ -41,6 +42,9 @@ const Root = () => {
       <Header />
       <MainContainer>
         <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
           <Route path="/">
             <Index />
           </Route>
