@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import clsx from "clsx";
+import { useDispatch } from "react-redux";
+
+import { hiddenHeader, hiddenFooter } from "../slices/root";
+import { Logo } from "../components/Header";
 
 const LoginSection = styled.section.attrs(() => ({
-  className: clsx(["w-full", "bg-white"], ["flex", "flex-wrap"])
+  className: clsx(
+    ["h-screen", "w-full", "bg-white"],
+    ["flex", "flex-wrap", "items-center"]
+  )
 }))``;
 
 const Input = ({ lable, type, name }) => {
   return (
     <>
-      <label className="text-sm font-semibold">{lable}</label>
+      <label className="text-sm text-gray-600 font-semibold">{lable}</label>
       <input
         type={type}
         name={name}
@@ -20,11 +27,18 @@ const Input = ({ lable, type, name }) => {
 };
 
 export default () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(hiddenHeader());
+    dispatch(hiddenFooter());
+  }, []);
   return (
     <div>
       <LoginSection>
         <div className="p-6 lg:px-32 w-full md:w-5/12">
-          <h1 className="text-xl lg:text-2xl font-semibold text-gray-700">
+          <Logo />
+          <h1 className="mt-10 text-2xl lg:text-3xl font-semibold text-gray-700">
             登录荱萌云
           </h1>
           <p className="pt-4 text-gray-500">赠送免费体验额度</p>
@@ -55,7 +69,7 @@ export default () => {
             </p>
           </div>
         </div>
-        <div className="w-full md:w-7/12 bg-gray-200"></div>
+        <div className="w-full h-full md:w-7/12 hidden md:block bg-gray-200"></div>
       </LoginSection>
     </div>
   );

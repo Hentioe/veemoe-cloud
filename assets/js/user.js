@@ -35,12 +35,14 @@ const store = configureStore({
 });
 
 const Root = () => {
-  const { className, style } = useSelector(state => state.root);
+  const { className, style, footerHidden, headerHidden } = useSelector(
+    state => state.root
+  );
 
   return (
     <div className={className} style={style}>
-      <Header />
-      <MainContainer>
+      <Header headerHidden={headerHidden} />
+      <MainContainer headerHidden={headerHidden}>
         <Switch>
           <Route path="/login">
             <Login />
@@ -50,7 +52,7 @@ const Root = () => {
           </Route>
         </Switch>
       </MainContainer>
-      <Footer />
+      <Footer footerHidden={footerHidden} />
     </div>
   );
 };

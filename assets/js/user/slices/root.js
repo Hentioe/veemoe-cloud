@@ -2,7 +2,9 @@ import { createSlice } from "redux-starter-kit";
 
 const initialState = {
   className: "bg-transparent",
-  style: {}
+  style: {},
+  headerHidden: false,
+  footerHidden: false
 };
 
 const rootSlice = createSlice({
@@ -12,10 +14,21 @@ const rootSlice = createSlice({
     setClassName: (state, action) =>
       Object.assign({}, state, { className: action.payload }),
     setStyle: (state, action) =>
-      Object.assign({}, state, { style: action.payload })
+      Object.assign({}, state, { style: action.payload }),
+    hiddenHeader: state => Object.assign({}, state, { headerHidden: true }),
+    showHeader: state => Object.assign({}, state, { headerHidden: false }),
+    hiddenFooter: state => Object.assign({}, state, { footerHidden: true }),
+    showFooter: state => Object.assign({}, state, { footerHidden: false })
   }
 });
 
-export const { setClassName, setStyle } = rootSlice.actions;
+export const {
+  setClassName,
+  setStyle,
+  hiddenHeader,
+  hiddenFooter,
+  showHeader,
+  showFooter
+} = rootSlice.actions;
 
 export default rootSlice.reducer;
