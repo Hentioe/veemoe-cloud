@@ -37,7 +37,7 @@ export default () => {
     <div>
       <LoginSection>
         <div className="p-6 lg:px-32 w-full md:w-5/12">
-          <Logo />
+          <Logo routable />
           <h1 className="mt-10 text-2xl lg:text-3xl font-semibold text-gray-700">
             登录荱萌云
           </h1>

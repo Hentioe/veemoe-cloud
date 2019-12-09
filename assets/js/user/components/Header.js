@@ -22,13 +22,26 @@ const Nav = styled.nav.attrs(({ scrolled, headerHidden }) => ({
   min-height: ${height};
 `;
 
-const Logo = () => {
-  return (
-    <Link to="/" className="font-normal text-2xl">
+const Logo = ({ routable }) => {
+  const className = "font-normal text-2xl";
+  const Text = (
+    <>
       <span>Veemoe</span>
       <span className="tracking-tight text-blue-500">Cloud</span>
-    </Link>
+    </>
   );
+  if (routable)
+    return (
+      <Link to="/" className={className}>
+        {Text}
+      </Link>
+    );
+  else
+    return (
+      <a href="/" className={className}>
+        {Text}
+      </a>
+    );
 };
 
 const MenuItem = styled(Link).attrs(() => ({

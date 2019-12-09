@@ -86,6 +86,14 @@ export default () => {
     dispatch(showFooter());
   }, []);
 
+  const handleRegister = e => {
+    alert("暂时未开放注册，如果您拥有帐号请直接登录。");
+  };
+
+  const handleDeploy = e => {
+    alert("文档待完成，尽情期待。");
+  };
+
   return (
     <>
       <Helmet>
@@ -112,8 +120,10 @@ export default () => {
           </div>
         </HeroSection>
         <NavButtomSection>
-          <HeroButton className="mr-4">注册服务</HeroButton>
-          <HeroButton>私有部署</HeroButton>
+          <HeroButton className="mr-4" onClick={handleRegister}>
+            注册服务
+          </HeroButton>
+          <HeroButton onClick={handleDeploy}>私有部署</HeroButton>
         </NavButtomSection>
         <DemoSection>
           <DemoCard>
