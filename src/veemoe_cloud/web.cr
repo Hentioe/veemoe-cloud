@@ -8,6 +8,7 @@ module VeemoeCloud::Web
     Kemal.config.logger = LoggerHandler.new(Logging.get_logger)
     Kemal.config.env = "production" if prod
 
+    Router.registry :sign_in, "cloud@veemoe.me", "demo123", "secret123"
     Router.registry :page
     Router.registry :display, res_path, cache_path
 

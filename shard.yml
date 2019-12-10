@@ -21,6 +21,8 @@ dependencies:
     github: imdrasil/sam.cr
   kemal:
     github: kemalcr/kemal
+  jwt:
+    github: crystal-community/jwt
   img_kit:
     github: Hentioe/imgkit.cr
   jennifer:
