@@ -21,6 +21,18 @@ module VeemoeCloud
     end
 
     # 启动 web 服务
-    Web.start port.to_i, prod, res_path, cache_path
+    Web.start(
+      port: port.to_i,
+      prod: prod,
+      res_path: res_path,
+      cache_path: cache_path,
+      admin_email: from_env("admin_email"),
+      admin_password: from_env("admin_password"),
+      base_secret_key: from_env("base_secret_key")
+    )
+  end
+
+  private macro from_env(name)
+    ENV["VEEMOE_CLOUD_{{name.upcase.id}}"]
   end
 end

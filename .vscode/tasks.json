@@ -1,90 +1,97 @@
 {
-    // 有关 tasks.json 格式的文档，请参见
-    // https://go.microsoft.com/fwlink/?LinkId=733558
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "starting",
-            "type": "process",
-            "command": "crystal",
-            "args": [
-                "run",
-                "src/veemoe_cloud.cr"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "testing",
-            "type": "process",
-            "command": "crystal",
-            "options": {
-                "env": {
-                    "VEEMOE_CLOUD_ENV": "test"
-                }
-            },
-            "args": [
-                "spec"
-            ],
-            "dependsOn": [
-                "db: reset(test)"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "db: reset(test)",
-            "type": "process",
-            "command": "crystal",
-            "options": {
-                "env": {
-                    "VEEMOE_CLOUD_ENV": "test"
-                }
-            },
-            "args": [
-                "sam.cr",
-                "--",
-                "db:create",
-                "@",
-                "db:drop",
-                "@",
-                "db:setup"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "db: reset",
-            "type": "process",
-            "command": "crystal",
-            "args": [
-                "sam.cr",
-                "--",
-                "db:create",
-                "@",
-                "db:drop",
-                "@",
-                "db:setup"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "assets: watching",
-            "type": "npm",
-            "script": "watch",
-            "path": "assets/",
-            "problemMatcher": []
-        },
-        {
-            "label": "assets: deploy",
-            "type": "npm",
-            "script": "deploy",
-            "path": "assets/",
-            "problemMatcher": []
-        },
-        {
-            "label": "assets: deps install",
-            "type": "npm",
-            "script": "install",
-            "path": "assets/",
-            "problemMatcher": []
+  // 有关 tasks.json 格式的文档，请参见
+  // https://go.microsoft.com/fwlink/?LinkId=733558
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "starting",
+      "type": "process",
+      "command": "crystal",
+      "options": {
+        "env": {
+          "VEEMOE_CLOUD_ADMIN_EMAIL": "cloud@veemoe.me",
+          "VEEMOE_CLOUD_ADMIN_PASSWORD": "demo123",
+          "VEEMOE_CLOUD_BASE_SECRET_KEY": "secret123"
         }
-    ]
+      },
+      "args": [
+        "run",
+        "src/veemoe_cloud.cr"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "testing",
+      "type": "process",
+      "command": "crystal",
+      "options": {
+        "env": {
+          "VEEMOE_CLOUD_ENV": "test"
+        }
+      },
+      "args": [
+        "spec"
+      ],
+      "dependsOn": [
+        "db: reset(test)"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "db: reset(test)",
+      "type": "process",
+      "command": "crystal",
+      "options": {
+        "env": {
+          "VEEMOE_CLOUD_ENV": "test"
+        }
+      },
+      "args": [
+        "sam.cr",
+        "--",
+        "db:create",
+        "@",
+        "db:drop",
+        "@",
+        "db:setup"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "db: reset",
+      "type": "process",
+      "command": "crystal",
+      "args": [
+        "sam.cr",
+        "--",
+        "db:create",
+        "@",
+        "db:drop",
+        "@",
+        "db:setup"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "assets: watching",
+      "type": "npm",
+      "script": "watch",
+      "path": "assets/",
+      "problemMatcher": []
+    },
+    {
+      "label": "assets: deploy",
+      "type": "npm",
+      "script": "deploy",
+      "path": "assets/",
+      "problemMatcher": []
+    },
+    {
+      "label": "assets: deps install",
+      "type": "npm",
+      "script": "install",
+      "path": "assets/",
+      "problemMatcher": []
+    }
+  ]
 }
