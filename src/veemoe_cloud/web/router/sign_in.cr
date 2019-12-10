@@ -23,7 +23,7 @@ module VeemoeCloud
               Time.utc.to_unix + (60 * 60 * 24)
             end
 
-          payload = {"user_id" => 1, exp => exp}
+          payload = {"user_id" => 1, "exp" => exp, "iat" => Time.utc.to_unix}
           token = JWT.encode(payload, secret_key, JWT::Algorithm::HS256)
 
           {msg: SUCCESS_MSG, token: token}

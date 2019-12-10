@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import clsx from "clsx";
 import { useDispatch } from "react-redux";
-import useSWR, { mutate } from "swr";
 import fetch from "unfetch";
 
 import { hiddenHeader, hiddenFooter } from "../slices/root";
