@@ -14,8 +14,9 @@ module VeemoeCloud::Web
     add_handler AuthHandler.new secret_key
 
     Router.registry :sign_in, email, password, secret_key
-    Router.registry :page
     Router.registry :display, res_path, cache_path
+    Router.registry :console_api
+    Router.registry :page
 
     Kemal.run(args: nil, port: port)
   end

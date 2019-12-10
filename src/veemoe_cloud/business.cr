@@ -31,6 +31,8 @@ module VeemoeCloud::Business
     end
   end
 
+  defdelegate :get_workspace, to: Workspace.get
+  defdelegate :find_workspace_list, to: Workspace.find_list
   defdelegate :create_workspace!, to: Workspace.create!
   defdelegate :update_workspace!, to: Workspace.update!
   defdelegate :delete_workspace!, to: Workspace.delete!

@@ -1,15 +1,15 @@
 module VeemoeCloud
   Business.def :workspace, {:by_name => true} do
     def self.create!(data : Hash)
-      if data[:is_protected]? == nil
-        data = data.merge({:is_protected => true})
-      end
-
       Jennifer::Adapter.adapter.transaction do
         space = Workspace.create!(data)
         FileUtils.mkdir("_res/#{space.name}")
         space
       end.not_nil!
+    end
+
+    def self.find_list
+      Workspace.all.to_a
     end
 
     def self.update!(space : Workspace, data : Hash)

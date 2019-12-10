@@ -2,8 +2,8 @@ require "img_kit"
 require "digest"
 
 module VeemoeCloud
-  Router.def :display, _i : String, _o : String do
-    get "/display/:workspace/:path" do |context|
+  Router.def :display, _i : String, _o : String, options: {:prefix => "/display"} do
+    get "/:workspace/:path" do |context|
       workspack, path = {epu("workspace"), epu("path")}
       full_path = i("#{workspack}/#{path}")
       hash = sign(full_path, context.request.query)

@@ -8,10 +8,50 @@ module VeemoeCloud::Router
     {% end %}
   end
 
-  macro def(name, *args)
+  macro def(name, *args, options = {:prefix => nil})
     module Router::{{name.camelcase.id}}
+      {% if options[:prefix] != nil %}
+        {% for method in HTTP_METHODS %}
+          def self.{{method.id}}(path : String, &block : HTTP::Server::Context -> _)
+            path = "{{options[:prefix].id}}#{path}"
+            raise Kemal::Exceptions::InvalidPathStartException.new({{method}}, path) unless Kemal::Utils.path_starts_with_slash?(path)
+            Kemal::RouteHandler::INSTANCE.add_route({{method}}.upcase, path, &block)
+          end
+        {% end %}
+
+        {{default_filter_path = options[:prefix] + "/*"}}
+        {% for type in ["before", "after"] %}
+          {% for method in FILTER_METHODS %}
+            def self.{{type.id}}_{{method.id}}(path : String = {{default_filter_path}}, &block : HTTP::Server::Context -> _)
+              if path != {{default_filter_path}}
+                path = "{{options[:prefix].id}}#{path}"
+              end
+              Kemal::FilterHandler::INSTANCE.{{type.id}}({{method}}.upcase, path, &block)
+            end
+          {% end %}
+        {% end %}
+      {% end %}
+
+      def self.json(context, data, status_code = 200)
+        context.response.content_type = "application/json"
+        context.response.status_code = status_code
+
+        case status_code
+        when 404
+          context.set "body", data.to_json
+        else
+          data.to_json
+        end
+      end
+
       def self.init({{*args}})
         {{yield}}
+      end
+
+      OK = {msg: "OK"}
+
+      def self.json_error(context, msg : String, status_code = 201)
+        json(context, {msg: msg}, status_code)
       end
     end
   end
