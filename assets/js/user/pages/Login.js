@@ -79,11 +79,17 @@ export default () => {
       .then(handleLoginResult);
   };
 
-  const handleLoginResult = ({ msg }) => {
+  const handleLoginResult = ({ msg, token }) => {
     if (msg == "OK") {
+      var expires = new Date();
+      expires.setFullYear(expires.getUTCFullYear() + 1);
+      document.cookie = `token=${token}; expires=${expires}; path=/`;
       setLoginResult(
         Object.assign({}, loginResult, { ok: true, msg: "登录成功，跳转中……" })
       );
+      setTimeout(() => {
+        location.reload();
+      }, 500);
     } else {
       setLoginResult(Object.assign({}, loginResult, { ok: false, msg: msg }));
     }
