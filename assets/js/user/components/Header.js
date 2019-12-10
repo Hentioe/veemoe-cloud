@@ -44,18 +44,18 @@ const Logo = ({ routable }) => {
     );
 };
 
-const LinkMenuClassName = clsx(
+const MenuClassName = clsx(
   ["text-gray-800", "hover:bg-gray-100"],
   ["p-4"],
   ["rounded-full"]
 );
 
-const MenuItem = styled(Link).attrs(() => ({
-  className: LinkMenuClassName
+const RouteMenu = styled(Link).attrs(() => ({
+  className: MenuClassName
 }))``;
 
-const LinkItem = styled.a.attrs(() => ({
-  className: LinkMenuClassName
+const LinkMenu = styled.a.attrs(() => ({
+  className: MenuClassName
 }))``;
 
 export default ({ headerHidden }) => {
@@ -77,9 +77,9 @@ export default ({ headerHidden }) => {
         {/* Menu */}
         <div>
           {CURRENT_USER ? (
-            <LinkItem href="/logout">退出 ({CURRENT_USER.email})</LinkItem>
+            <LinkMenu href="/console">控制台</LinkMenu>
           ) : (
-            <MenuItem to="/login">登录</MenuItem>
+            <RouteMenu to="/login">登录</RouteMenu>
           )}
         </div>
       </Nav>
