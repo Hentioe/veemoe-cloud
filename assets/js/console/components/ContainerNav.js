@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
@@ -36,6 +37,7 @@ import {
 
 import useSWR from "swr";
 import { mutate, jsonFetcher } from "../../lib/helper";
+import { setCurrentSpace } from "../slices/workspace";
 
 const ListLinkItem = props => {
   return (
@@ -110,7 +112,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default ({ children }) => {
-  const [currentSpace, setCurrentSpace] = useState("未选择");
+  const dispatch = useDispatch();
+  const { currentSpace } = useSelector(state => state.workspace);
 
   const [menuList, setMenuList] = useState({
     styles: [],
@@ -121,19 +124,28 @@ export default ({ children }) => {
   useEffect(() => {
     setMenuList({
       styles: [
-        { text: "添加样式", to: `/console/${currentSpace}/styles/add` },
-        { text: "编辑样式", to: `/console/${currentSpace}/styles/edit` },
-        { text: "批量操作", to: `/console/${currentSpace}/styles/managa` }
+        { text: "添加样式", to: `/console/${currentSpace.name}/styles/add` },
+        { text: "编辑样式", to: `/console/${currentSpace.name}/styles/edit` },
+        {
+          text: "批量操作",
+          to: `/console/${currentSpace.name}/styles/managa`
+        }
       ],
       pipes: [
-        { text: "添加管道", to: `/console/${currentSpace}/pipes/add` },
-        { text: "编辑管道", to: `/console/${currentSpace}/pipes/edit` },
-        { text: "批量操作", to: `/console/${currentSpace}/pipes/managa` }
+        { text: "添加管道", to: `/console/${currentSpace.name}/pipes/add` },
+        { text: "编辑管道", to: `/console/${currentSpace.name}/pipes/edit` },
+        { text: "批量操作", to: `/console/${currentSpace.name}/pipes/managa` }
       ],
       matches: [
-        { text: "添加匹配", to: `/console/${currentSpace}/matches/add` },
-        { text: "编辑匹配", to: `/console/${currentSpace}/matches/edit` },
-        { text: "批量操作", to: `/console/${currentSpace}/matches/managa` }
+        { text: "添加匹配", to: `/console/${currentSpace.name}/matches/add` },
+        {
+          text: "编辑匹配",
+          to: `/console/${currentSpace.name}/matches/edit`
+        },
+        {
+          text: "批量操作",
+          to: `/console/${currentSpace.name}/matches/managa`
+        }
       ]
     });
   }, [currentSpace]);
@@ -182,9 +194,9 @@ export default ({ children }) => {
     setSpaceAnchorEl(e.currentTarget);
   };
 
-  const handleSpaceChoose = (e, space) => {
-    setCurrentSpace(space);
+  const handleCurrentSpaceChange = (e, space) => {
     setSpaceAnchorEl(null);
+    dispatch(setCurrentSpace(space));
   };
 
   const handleSpaceClose = () => {
@@ -215,18 +227,21 @@ export default ({ children }) => {
     mutate("/console/api/workspaces", { name: newSpaceName, description: "无" })
       .then(r => r.json())
       .then(space => {
+        setSpaces([...spaces, space]);
         handleCreateSpaceDialogClose();
       });
   };
 
-  const { data: spaces, error } = useSWR(
-    "/console/api/workspaces",
-    jsonFetcher
-  );
+  const { data, error } = useSWR("/console/api/workspaces", jsonFetcher);
+
+  const [spaces, setSpaces] = useState([currentSpace]);
 
   useEffect(() => {
-    if (spaces) setCurrentSpace(spaces[0].name);
-  }, [spaces]);
+    if (data) {
+      setSpaces(data);
+      dispatch(setCurrentSpace(data[0]));
+    }
+  }, [data]);
 
   if (!spaces) {
     return <div>载入空间列表中……</div>;
@@ -300,7 +315,7 @@ export default ({ children }) => {
       >
         <div className={classes.drawerHeader}>
           <Button fullWidth variant="outlined" onClick={handleSpaceClick}>
-            /{currentSpace}
+            /{currentSpace.name}
           </Button>
           <Menu
             id="simple-menu"
@@ -309,9 +324,12 @@ export default ({ children }) => {
             open={Boolean(spaceAnchorEl)}
             onClose={handleSpaceClose}
           >
-            {spaces.map(({ id, name }) => (
-              <MenuItem key={id} onClick={e => handleSpaceChoose(e, name)}>
-                {name}
+            {spaces.map(space => (
+              <MenuItem
+                key={space.id}
+                onClick={e => handleCurrentSpaceChange(e, space)}
+              >
+                {space.name}
               </MenuItem>
             ))}
 
@@ -356,10 +374,13 @@ export default ({ children }) => {
         </div>
         <Divider />
         <List>
-          <ListLinkItem button to={`/console/${currentSpace}/file-managaer`}>
+          <ListLinkItem
+            button
+            to={`/console/${currentSpace.name}/file-managaer`}
+          >
             <ListItemText primary="文件管理" />
           </ListLinkItem>
-          <ListLinkItem button to={`/console/${currentSpace}/dashboard`}>
+          <ListLinkItem button to={`/console/${currentSpace.name}/dashboard`}>
             <ListItemText primary="数据统计" />
           </ListLinkItem>
           <ListItem button onClick={e => handleCollapseToggle(e, "styles")}>
@@ -422,7 +443,7 @@ export default ({ children }) => {
           </Collapse>
         </List>
         <Divider />
-        <ListLinkItem button to={`/console/${currentSpace}/settings`}>
+        <ListLinkItem button to={`/console/${currentSpace.name}/settings`}>
           <ListItemText primary="空间设置" />
         </ListLinkItem>
       </Drawer>

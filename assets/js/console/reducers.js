@@ -1,3 +1,5 @@
 import { combineReducers } from "redux";
 
-export default combineReducers({});
+import workspaceReducer from "./slices/workspace";
+
+export default combineReducers({ workspace: workspaceReducer });
