@@ -243,7 +243,7 @@ export default ({ children }) => {
     }
   }, [data]);
 
-  if (!spaces) {
+  if (!data) {
     return <div>载入空间列表中……</div>;
   }
 

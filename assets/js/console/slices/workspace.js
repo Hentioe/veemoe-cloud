@@ -1,7 +1,7 @@
 import { createSlice } from "redux-starter-kit";
 
 const initialState = {
-  currentSpace: { id: 0, name: "loading" }
+  currentSpace: { id: 0, name: "loading", is_protected: true }
 };
 
 const workspaceSlice = createSlice({
