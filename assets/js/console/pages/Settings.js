@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Container,
   Typography,
@@ -9,8 +9,16 @@ import {
   Box,
   Switch,
   FormGroup,
-  FormControlLabel
+  FormControlLabel,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
 } from "@material-ui/core";
+
+import { mutate, deletor, updater } from "../../lib/helper";
+import { setCurrentSpace } from "../slices/workspace";
 
 const DangerItem = ({
   lable,
@@ -36,6 +44,7 @@ const DangerItem = ({
 };
 
 export default () => {
+  const dispatch = useDispatch();
   const { currentSpace } = useSelector(state => state.workspace);
   const [space, setSpace] = useState(currentSpace);
   const [isChanged, setIsChanged] = useState(false);
@@ -59,6 +68,45 @@ export default () => {
 
   const handleDescriptionChange = e => {
     setSpace(Object.assign({}, space, { description: e.target.value }));
+  };
+
+  const handleUpdateProfile = () => {
+    updater(`/console/api/workspaces/${space.id}`, space).then(space => {
+      dispatch(setCurrentSpace(space));
+      handleCreateSpaceDialogClose();
+    });
+  };
+
+  const handleDelete = () => {
+    deletor(`/console/api/workspaces/${space.id}`).then(space => {
+      location.href = "/console";
+    });
+  };
+
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+
+  const handleRenameClick = () => {
+    setRenameDialogOpen(true);
+  };
+
+  const [newName, setNewName] = useState("");
+
+  const handleRenameDialogClose = () => {
+    setNewName("");
+    setRenameDialogOpen(false);
+  };
+
+  const handleNewNameChange = e => {
+    setNewName(e.target.value);
+  };
+
+  const handleRenameDialogOK = () => {
+    const newSpace = Object.assign({}, currentSpace, { name: newName });
+    updater(`/console/api/workspaces/${currentSpace.id}`, newSpace).then(
+      space => {
+        location.href = `/console/${space.name}/settings`;
+      }
+    );
   };
 
   return (
@@ -92,11 +140,15 @@ export default () => {
               inputProps={{ "aria-label": "primary checkbox" }}
             />
           }
-          label={currentSpace.is_protected ? "受保护" : "未受保护"}
+          label={space.is_protected ? "受保护" : "未受保护"}
         />
       </FormGroup>
       <Divider light style={{ marginBottom: 15 }} />
-      <Button variant="contained" color={isChanged ? "secondary" : "primary"}>
+      <Button
+        variant="contained"
+        color={isChanged ? "secondary" : "primary"}
+        onClick={handleUpdateProfile}
+      >
         更新属性
       </Button>
       <Typography variant="h6" gutterBottom style={{ marginTop: 30 }}>
@@ -107,12 +159,43 @@ export default () => {
           lable="重命名"
           description="连同服务器上的物理目录一并重命名，会产生副作用，请谨慎考虑。"
           actionText="重命名"
+          onClick={handleRenameClick}
         />
+        <Dialog
+          open={renameDialogOpen}
+          onClose={handleRenameDialogClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">重命名工作空间</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              重命名会导致 URL
+              路径发生变化，服务器上对应的物理目录也会一并重命名。
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="新名称（路径）"
+              fullWidth
+              value={newName}
+              onChange={handleNewNameChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleRenameDialogClose} color="primary">
+              取消
+            </Button>
+            <Button onClick={handleRenameDialogOK} color="primary">
+              确认
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Divider />
         <DangerItem
           lable="删除空间"
           description="连同服务器上的物理目录一并删除，清空所有文件，请仔细考虑。"
           actionText="删除"
+          onClick={handleDelete}
         />
       </Box>
     </Container>

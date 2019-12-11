@@ -21,8 +21,9 @@ module VeemoeCloud
 
       if space = Business.get_workspace(id)
         Business.update_workspace!(space, {
-          :name        => body["name"].as(String),
-          :description => body["description"].as(String),
+          :name         => body["name"].as(String),
+          :description  => body["description"].as(String),
+          :is_protected => body["is_protected"].as(Bool),
         })
         json(context, space)
       else

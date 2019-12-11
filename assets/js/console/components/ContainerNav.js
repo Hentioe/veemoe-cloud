@@ -37,7 +37,7 @@ import {
 
 import useSWR from "swr";
 import { mutate, jsonFetcher } from "../../lib/helper";
-import { setCurrentSpace } from "../slices/workspace";
+import { setCurrentSpace, setSpaces } from "../slices/workspace";
 
 const ListLinkItem = props => {
   return (
@@ -113,7 +113,7 @@ const useStyles = makeStyles(theme => ({
 
 export default ({ children }) => {
   const dispatch = useDispatch();
-  const { currentSpace } = useSelector(state => state.workspace);
+  const { spaces, currentSpace } = useSelector(state => state.workspace);
 
   const [menuList, setMenuList] = useState({
     styles: [],
@@ -208,9 +208,7 @@ export default ({ children }) => {
     setSpaceAnchorEl(null);
   };
 
-  const [createSpaceDialogOpen, setCreateSpaceDialogOpen] = React.useState(
-    false
-  );
+  const [createSpaceDialogOpen, setCreateSpaceDialogOpen] = useState(false);
 
   const handleCreateSpaceDialogClose = () => {
     setNewSpaceName("");
@@ -227,18 +225,16 @@ export default ({ children }) => {
     mutate("/console/api/workspaces", { name: newSpaceName, description: "无" })
       .then(r => r.json())
       .then(space => {
-        setSpaces([...spaces, space]);
+        dispatch(setSpaces([...spaces, space]));
         handleCreateSpaceDialogClose();
       });
   };
 
   const { data, error } = useSWR("/console/api/workspaces", jsonFetcher);
 
-  const [spaces, setSpaces] = useState([currentSpace]);
-
   useEffect(() => {
-    if (data) {
-      setSpaces(data);
+    if (data && data.length > 0) {
+      dispatch(setSpaces(data));
       dispatch(setCurrentSpace(data[0]));
     }
   }, [data]);

@@ -11,6 +11,13 @@ const mutate = (url, data, method = "POST") =>
     body: JSON.stringify(data)
   });
 
+const deletor = url => fetch(url, { method: "DELETE" }).then(r => r.json());
+
+const updater = (url, data) =>
+  fetch(url, { method: "PUT", headers, body: JSON.stringify(data) }).then(r =>
+    r.json()
+  );
+
 const jsonFetcher = url => fetch(url, { method: "GET" }).then(r => r.json());
 
-export { mutate, jsonFetcher };
+export { mutate, jsonFetcher, deletor, updater };
