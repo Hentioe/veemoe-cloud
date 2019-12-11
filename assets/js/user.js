@@ -25,7 +25,7 @@ import Footer from "./user/components/Footer";
 import Index from "./user/pages/Index";
 import Login from "./user/pages/Login";
 
-// 创建 Redux Store
+// 创建 Redux store
 import Reducers from "./user/reducers";
 const DEBUG = process.env.NODE_ENV == "development";
 const middlewares = [thunkMiddleware, DEBUG && reduxLogger].filter(Boolean);
