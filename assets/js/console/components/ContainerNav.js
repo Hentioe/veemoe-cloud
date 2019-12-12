@@ -372,7 +372,7 @@ export default ({ children }) => {
         <List>
           <ListLinkItem
             button
-            to={`/console/${currentSpace.name}/file-managaer`}
+            to={`/console/${currentSpace.name}/file-manager`}
           >
             <ListItemText primary="文件管理" />
           </ListLinkItem>

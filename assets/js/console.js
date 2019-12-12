@@ -14,6 +14,7 @@ import { HelmetProvider } from "react-helmet-async";
 import ContainerNav from "./console/components/ContainerNav";
 import Dashboard from "./console/pages/Dashboard";
 import Settings from "./console/pages/Settings";
+import FileManager from "./console/pages/FileManager";
 
 // 创建 Redux store
 import Reducers from "./console/reducers";
@@ -33,6 +34,9 @@ const App = () => {
             <Switch>
               <Route path="/console/:workspace/settings">
                 <Settings />
+              </Route>
+              <Route path="/console/:workspace/file-manager">
+                <FileManager />
               </Route>
               <Route path="/">
                 <Dashboard />
