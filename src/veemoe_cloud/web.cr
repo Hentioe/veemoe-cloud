@@ -21,7 +21,7 @@ module VeemoeCloud::Web
 
     Router.registry :sign_in, admin_email, admin_password, base_secret_key
     Router.registry :display, res_path, cache_path
-    Router.registry :console_api
+    Router.registry :console_api, res_path
     Router.registry :page
 
     Kemal.run(args: nil, port: port)
