@@ -13,8 +13,10 @@ import { HelmetProvider } from "react-helmet-async";
 // 导入页面和组件
 import ContainerNav from "./console/components/ContainerNav";
 import Dashboard from "./console/pages/Dashboard";
+import Settings from "./console/pages/Settings";
+import FileManager from "./console/pages/FileManager";
 
-// 创建 Redux Store
+// 创建 Redux store
 import Reducers from "./console/reducers";
 const DEBUG = process.env.NODE_ENV == "development";
 const middlewares = [thunkMiddleware, DEBUG && reduxLogger].filter(Boolean);
@@ -30,6 +32,12 @@ const App = () => {
         <Router>
           <ContainerNav>
             <Switch>
+              <Route path="/console/:workspace/settings">
+                <Settings />
+              </Route>
+              <Route path="/console/:workspace/file-manager">
+                <FileManager />
+              </Route>
               <Route path="/">
                 <Dashboard />
               </Route>

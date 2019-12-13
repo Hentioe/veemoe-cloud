@@ -16,7 +16,7 @@ module VeemoeCloud
       Jennifer::Adapter.adapter.transaction do
         last_name = space.name
         space.update_columns(data)
-        if last_name != space
+        if last_name != space.name
           FileUtils.mv("_res/#{last_name}", "_res/#{space.name}")
         end
         space

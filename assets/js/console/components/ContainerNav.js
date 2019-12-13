@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
@@ -16,7 +17,13 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Button
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField
 } from "@material-ui/core";
 
 import {
@@ -27,6 +34,10 @@ import {
   ExpandMore as ExpandMoreIcon,
   AccountCircle as AccountCircleIcon
 } from "@material-ui/icons";
+
+import useSWR from "swr";
+import { mutate, jsonFetcher } from "../../lib/helper";
+import { setCurrentSpace, setSpaces } from "../slices/workspace";
 
 const ListLinkItem = props => {
   return (
@@ -100,10 +111,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const spaceList = ["demo", "veemoe"];
-
 export default ({ children }) => {
-  const [currentSpace, setCurrentSpace] = useState("demo");
+  const dispatch = useDispatch();
+  const { spaces, currentSpace } = useSelector(state => state.workspace);
 
   const [menuList, setMenuList] = useState({
     styles: [],
@@ -114,19 +124,28 @@ export default ({ children }) => {
   useEffect(() => {
     setMenuList({
       styles: [
-        { text: "添加样式", to: `/console/${currentSpace}/styles/add` },
-        { text: "编辑样式", to: `/console/${currentSpace}/styles/edit` },
-        { text: "批量操作", to: `/console/${currentSpace}/styles/managa` }
+        { text: "添加样式", to: `/console/${currentSpace.name}/styles/add` },
+        { text: "编辑样式", to: `/console/${currentSpace.name}/styles/edit` },
+        {
+          text: "批量操作",
+          to: `/console/${currentSpace.name}/styles/managa`
+        }
       ],
       pipes: [
-        { text: "添加管道", to: `/console/${currentSpace}/pipes/add` },
-        { text: "编辑管道", to: `/console/${currentSpace}/pipes/edit` },
-        { text: "批量操作", to: `/console/${currentSpace}/pipes/managa` }
+        { text: "添加管道", to: `/console/${currentSpace.name}/pipes/add` },
+        { text: "编辑管道", to: `/console/${currentSpace.name}/pipes/edit` },
+        { text: "批量操作", to: `/console/${currentSpace.name}/pipes/managa` }
       ],
       matches: [
-        { text: "添加匹配", to: `/console/${currentSpace}/matches/add` },
-        { text: "编辑匹配", to: `/console/${currentSpace}/matches/edit` },
-        { text: "批量操作", to: `/console/${currentSpace}/matches/managa` }
+        { text: "添加匹配", to: `/console/${currentSpace.name}/matches/add` },
+        {
+          text: "编辑匹配",
+          to: `/console/${currentSpace.name}/matches/edit`
+        },
+        {
+          text: "批量操作",
+          to: `/console/${currentSpace.name}/matches/managa`
+        }
       ]
     });
   }, [currentSpace]);
@@ -175,9 +194,9 @@ export default ({ children }) => {
     setSpaceAnchorEl(e.currentTarget);
   };
 
-  const handleSpaceChoose = (e, space) => {
-    setCurrentSpace(space);
+  const handleCurrentSpaceChange = (e, space) => {
     setSpaceAnchorEl(null);
+    dispatch(setCurrentSpace(space));
   };
 
   const handleSpaceClose = () => {
@@ -185,8 +204,48 @@ export default ({ children }) => {
   };
 
   const handleSpaceCreate = () => {
+    setCreateSpaceDialogOpen(true);
     setSpaceAnchorEl(null);
   };
+
+  const [createSpaceDialogOpen, setCreateSpaceDialogOpen] = useState(false);
+
+  const handleCreateSpaceDialogClose = () => {
+    setNewSpaceName("");
+    setCreateSpaceDialogOpen(false);
+  };
+
+  const [newSpaceName, setNewSpaceName] = useState("");
+
+  const handleNewSpaceNameChange = e => {
+    setNewSpaceName(e.target.value);
+  };
+
+  const handleCreateSpaceDialogOK = () => {
+    mutate("/console/api/workspaces", { name: newSpaceName, description: "无" })
+      .then(r => r.json())
+      .then(space => {
+        dispatch(setSpaces([...spaces, space]));
+        handleCreateSpaceDialogClose();
+      });
+  };
+
+  const { data, error } = useSWR("/console/api/workspaces", jsonFetcher);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      dispatch(setSpaces(data));
+      dispatch(setCurrentSpace(data[0]));
+    }
+  }, [data]);
+
+  if (!data) {
+    return <div>载入空间列表中……</div>;
+  }
+
+  if (error) {
+    return <div>载入空间列表出错，请刷新重试。</div>;
+  }
 
   return (
     <div className={classes.root}>
@@ -252,7 +311,7 @@ export default ({ children }) => {
       >
         <div className={classes.drawerHeader}>
           <Button fullWidth variant="outlined" onClick={handleSpaceClick}>
-            /{currentSpace}
+            /{currentSpace.name}
           </Button>
           <Menu
             id="simple-menu"
@@ -261,14 +320,45 @@ export default ({ children }) => {
             open={Boolean(spaceAnchorEl)}
             onClose={handleSpaceClose}
           >
-            {spaceList.map(space => (
-              <MenuItem key={space} onClick={e => handleSpaceChoose(e, space)}>
-                {space}
+            {spaces.map(space => (
+              <MenuItem
+                key={space.id}
+                onClick={e => handleCurrentSpaceChange(e, space)}
+              >
+                {space.name}
               </MenuItem>
             ))}
 
             <Divider />
             <MenuItem onClick={handleSpaceCreate}>创建新空间</MenuItem>
+            <Dialog
+              open={createSpaceDialogOpen}
+              onClose={handleCreateSpaceDialogClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">创建新的工作空间</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  每一个工作空间都是相对独立的，对应着一个具体的物理目录作为根。如果您想修改空间配置或者删除空间，请进入空间设置。
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="空间名称（路径）"
+                  value={newSpaceName}
+                  onChange={handleNewSpaceNameChange}
+                  fullWidth
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCreateSpaceDialogClose} color="primary">
+                  取消
+                </Button>
+                <Button onClick={handleCreateSpaceDialogOK} color="primary">
+                  创建
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Menu>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
@@ -280,10 +370,13 @@ export default ({ children }) => {
         </div>
         <Divider />
         <List>
-          <ListLinkItem button to={`/console/${currentSpace}/file-managaer`}>
+          <ListLinkItem
+            button
+            to={`/console/${currentSpace.name}/file-manager`}
+          >
             <ListItemText primary="文件管理" />
           </ListLinkItem>
-          <ListLinkItem button to={`/console/${currentSpace}/dashboard`}>
+          <ListLinkItem button to={`/console/${currentSpace.name}/dashboard`}>
             <ListItemText primary="数据统计" />
           </ListLinkItem>
           <ListItem button onClick={e => handleCollapseToggle(e, "styles")}>
@@ -346,7 +439,7 @@ export default ({ children }) => {
           </Collapse>
         </List>
         <Divider />
-        <ListLinkItem button to={`/console/${currentSpace}/settings`}>
+        <ListLinkItem button to={`/console/${currentSpace.name}/settings`}>
           <ListItemText primary="空间设置" />
         </ListLinkItem>
       </Drawer>
