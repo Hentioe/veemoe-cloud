@@ -17,7 +17,7 @@ import {
   DialogContentText
 } from "@material-ui/core";
 
-import { mutate, deletor, updater } from "../../lib/helper";
+import { deletor, updater } from "../../lib/helper";
 import { setCurrentSpace } from "../slices/workspace";
 
 const DangerItem = ({

@@ -20,4 +20,4 @@ const updater = (url, data) =>
 
 const jsonFetcher = url => fetch(url, { method: "GET" }).then(r => r.json());
 
-export { mutate, jsonFetcher, deletor, updater };
+export { mutate, jsonFetcher, jsonFetcher as fetcher, deletor, updater };

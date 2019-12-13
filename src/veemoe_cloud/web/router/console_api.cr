@@ -59,7 +59,7 @@ module VeemoeCloud
       create_directory(context, res_path, space_name, root, name)
     end
 
-    put "/files/:space_name/directories" do |context|
+    put "/files/:space_name/rename" do |context|
       space_name = context.params.url["space_name"]
       body = context.params.json
 
