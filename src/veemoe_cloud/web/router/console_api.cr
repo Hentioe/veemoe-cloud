@@ -70,7 +70,7 @@ module VeemoeCloud
       rename_file(context, res_path, space_name, root, old_name, new_name)
     end
 
-    delete "/files/:space_name/directories" do |context|
+    delete "/files/:space_name" do |context|
       space_name = context.params.url["space_name"]
       path = context.params.query["path"]
 
@@ -136,7 +136,7 @@ module VeemoeCloud
         end
 
         FileUtils.mkdir("#{rootpath}/#{name}")
-        json(context, OK)
+        json(context, FileItem.new("#{rootpath}/#{name}"))
       else
         json_error(context, "Workspace not found: #{space_name}", status_code: 404)
       end
