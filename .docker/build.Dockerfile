@@ -1,4 +1,4 @@
-FROM bluerain/crystal:0.31.1-build AS ImageMagick7
+FROM bluerain/crystal:0.32.0-build AS ImageMagick7
 
 ARG MAGICK_VERSION=7.0.9-8
 ARG MAGICK_DELEGATE_DEPS=libpng-dev\ libjpeg-dev\ libwebp-dev
@@ -15,7 +15,7 @@ RUN apt-get update && \
     make
 
 
-FROM bluerain/crystal:0.31.1-build
+FROM bluerain/crystal:0.32.0-build
 
 WORKDIR /home
 

@@ -10,7 +10,7 @@ targets:
   sam:
     main: sam.cr
 
-crystal: 0.31.1
+crystal: 0.32.0
 
 dependencies:
   clicr:
