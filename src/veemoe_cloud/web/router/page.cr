@@ -25,6 +25,7 @@ module VeemoeCloud
 
     get "/console" do |context|
       if context.user_id? == 1
+        spaces = Business.find_workspace_list
         render "src/views/console.html.ecr"
       else
         context.redirect "/login"
@@ -33,6 +34,7 @@ module VeemoeCloud
 
     get "/console/*" do |context|
       if context.user_id? == 1
+        spaces = Business.find_workspace_list
         render "src/views/console.html.ecr"
       else
         context.redirect "/login"

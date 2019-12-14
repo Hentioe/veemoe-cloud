@@ -76,6 +76,24 @@ module VeemoeCloud
 
       delete_file(context, res_path, space_name, path)
     end
+
+    post "/files/:space_name/upload" do |context|
+      space_name = context.params.url["space_name"]
+      tempfile = context.params.files["file"].tempfile
+      filename = context.params.body["name"].as(String)
+      dir = context.params.body["dir"].as(String)
+
+      file_path = File.join [res_path, space_name, dir, filename]
+
+      if file_path.includes?("..")
+        json_error(context, ILLEGAL_ACCESS_ERROR)
+      else
+        File.open(file_path, "w") do |f|
+          IO.copy(tempfile, f)
+        end
+        json_success(context, uploaded: FileItem.new(file_path))
+      end
+    end
   end
 
   module VeemoeCloud::Router::ConsoleApi

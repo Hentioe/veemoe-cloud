@@ -12,6 +12,9 @@
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      var SPACES = <%= spaces.to_json %>;
+    </script>
     <script
       type="text/javascript"
       src="<%= Digests.logical_path(%{/js/console.js}) %>"

@@ -88,17 +88,6 @@ export default () => {
   const [currentPath, setCurrentPath] = useState([]);
   const [files, setFiles] = useState([]);
 
-  const [operationsAnchorEl, setOperationsAnchorEl] = useState(null);
-  const operationsOpen = Boolean(operationsAnchorEl);
-
-  const handleOperationsClose = () => {
-    setOperationsAnchorEl(null);
-  };
-
-  const handleOperationsClick = e => {
-    setOperationsAnchorEl(e.currentTarget);
-  };
-
   const [contextPosition, setContextPosition] = useState(initContextPosition);
 
   const handleGridContextMenu = e => {
@@ -239,6 +228,74 @@ export default () => {
     });
   };
 
+  const handleDrgaOver = e => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const upload = (uploads, currentIndex = 0, uploadeds = []) => {
+    console.log(currentIndex);
+    const file = uploads[currentIndex];
+    const form = new FormData();
+    const url = `/console/api/files/${currentSpace.name}/upload`; //服务器上传地址
+    form.append("file", file);
+    form.append("name", file.name);
+    form.append("dir", currentPath.join("/"));
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("post", url, true);
+
+    //上传进度事件
+    xhr.upload.addEventListener(
+      "progress",
+      function(result) {
+        if (result.lengthComputable) {
+          //上传进度
+          const percent = ((result.loaded / result.total) * 100).toFixed(2);
+          console.log(`uploading: ${percent}%, ${file.name}`);
+        }
+      },
+      false
+    );
+
+    xhr.addEventListener("readystatechange", function() {
+      var result = xhr;
+      if (result.status != 200) {
+        //error
+        console.log(
+          "上传失败",
+          result.status,
+          result.statusText,
+          result.response
+        );
+      } else if (result.readyState == 4) {
+        //finished
+        const json = JSON.parse(result.response);
+        const { msg, uploaded } = json;
+        if (msg === "OK") {
+          uploaded.selected = true;
+          const filterFiles = files.filter(f => f.name !== file.name);
+          console.log(uploaded, uploadeds);
+          setFiles([uploaded, ...uploadeds, ...filterFiles]);
+          if (currentIndex < uploads.length - 1)
+            upload(uploads, ++currentIndex, [uploaded, ...uploadeds]);
+        }
+      }
+    });
+    xhr.send(form); //开始上传
+  };
+
+  const handleDragEnter = e => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    upload(e.dataTransfer.files);
+  };
+
   return (
     <Container maxWidth="md">
       <Box borderRadius={4} boxShadow={2} p={2}>
@@ -320,10 +377,14 @@ export default () => {
           border={1}
           borderRadius={3}
           borderColor="#c0c0c0"
+          style={{ cursor: "context-menu" }}
           style={{ overflow: "auto", height: "75vh" }}
           onContextMenu={handleGridContextMenu}
+          onDragOver={handleDrgaOver}
+          onDragEnter={handleDragEnter}
+          onDrop={handleDrop}
         >
-          <div className={classes.root} style={{ cursor: "context-menu" }}>
+          <div className={classes.root}>
             <Grid container spacing={3}>
               {files.map(({ name, is_directory, selected }) => (
                 <Grid

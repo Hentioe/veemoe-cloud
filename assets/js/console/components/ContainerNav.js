@@ -35,8 +35,7 @@ import {
   AccountCircle as AccountCircleIcon
 } from "@material-ui/icons";
 
-import useSWR from "swr";
-import { mutate, jsonFetcher } from "../../lib/helper";
+import { mutate } from "../../lib/helper";
 import { setCurrentSpace, setSpaces } from "../slices/workspace";
 
 const ListLinkItem = props => {
@@ -229,23 +228,6 @@ export default ({ children }) => {
         handleCreateSpaceDialogClose();
       });
   };
-
-  const { data, error } = useSWR("/console/api/workspaces", jsonFetcher);
-
-  useEffect(() => {
-    if (data && data.length > 0) {
-      dispatch(setSpaces(data));
-      dispatch(setCurrentSpace(data[0]));
-    }
-  }, [data]);
-
-  if (!data) {
-    return <div>载入空间列表中……</div>;
-  }
-
-  if (error) {
-    return <div>载入空间列表出错，请刷新重试。</div>;
-  }
 
   return (
     <div className={classes.root}>

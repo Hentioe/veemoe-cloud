@@ -53,6 +53,10 @@ module VeemoeCloud::Router
       def self.json_error(context, msg : String, status_code = 201)
         json(context, {msg: msg}, status_code)
       end
+
+      def self.json_success(context, **args)
+        json(context, {msg: "OK"}.merge(args))
+      end
     end
   end
 end
