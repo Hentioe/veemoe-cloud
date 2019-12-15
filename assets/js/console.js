@@ -15,6 +15,7 @@ import ContainerNav from "./console/components/ContainerNav";
 import Dashboard from "./console/pages/Dashboard";
 import Settings from "./console/pages/Settings";
 import FileManager from "./console/pages/FileManager";
+import PipeEdit from "./console/pages/PipeEdit";
 
 // 创建 Redux store
 import Reducers from "./console/reducers";
@@ -32,11 +33,14 @@ const App = () => {
         <Router>
           <ContainerNav>
             <Switch>
-              <Route path="/console/:workspace/settings">
+              <Route path="/console/:space_name/settings">
                 <Settings />
               </Route>
-              <Route path="/console/:workspace/file-manager">
+              <Route path="/console/:space_name/file-manager">
                 <FileManager />
+              </Route>
+              <Route path="/console/:space_name/pipes/add">
+                <PipeEdit />
               </Route>
               <Route path="/">
                 <Dashboard />

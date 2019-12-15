@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {
   NavigateNext as NavigateNextIcon,
   Search as SearchIcon,
@@ -7,7 +8,8 @@ import {
   ArrowBack as ArrowBackIcon,
   ArrowForward as ArrowForwardIcon,
   Edit as EditIcon,
-  Delete as DeleteIcon
+  Delete as DeleteIcon,
+  Layers as LayersIcon
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -82,6 +84,7 @@ const initContextPosition = {
 
 export default () => {
   const classes = useStyles();
+  const history = useHistory();
 
   const { currentSpace } = useSelector(state => state.workspace);
 
@@ -234,7 +237,6 @@ export default () => {
   };
 
   const upload = (uploads, currentIndex = 0, uploadeds = []) => {
-    console.log(currentIndex);
     const file = uploads[currentIndex];
     const form = new FormData();
     const url = `/console/api/files/${currentSpace.name}/upload`; //服务器上传地址
@@ -275,7 +277,6 @@ export default () => {
         if (msg === "OK") {
           uploaded.selected = true;
           const filterFiles = files.filter(f => f.name !== file.name);
-          console.log(uploaded, uploadeds);
           setFiles([uploaded, ...uploadeds, ...filterFiles]);
           if (currentIndex < uploads.length - 1)
             upload(uploads, ++currentIndex, [uploaded, ...uploadeds]);
@@ -294,6 +295,15 @@ export default () => {
     e.preventDefault();
     e.stopPropagation();
     upload(e.dataTransfer.files);
+  };
+
+  const handleCreateInlinePipe = e => {
+    const selected = files.filter(f => f.selected)[0];
+    history.push(
+      `/console/${currentSpace.name}/pipes/add?file=${
+        currentPath.length > 0 ? currentPath.join("/") + "/" : ""
+      }${selected.name}`
+    );
   };
 
   return (
@@ -329,13 +339,19 @@ export default () => {
               <ListItemIcon>
                 <CreateNewFolderIcon fontSize="small" />
               </ListItemIcon>
-              <Typography variant="button">新建</Typography>
+              <Typography variant="button">新建目录</Typography>
             </MenuItem>
             <MenuItem onClick={handleRenameDialogOpen}>
               <ListItemIcon>
                 <EditIcon fontSize="small" />
               </ListItemIcon>
               <Typography variant="button">重命名</Typography>
+            </MenuItem>
+            <MenuItem onClick={handleCreateInlinePipe}>
+              <ListItemIcon>
+                <LayersIcon fontSize="small" />
+              </ListItemIcon>
+              <Typography variant="button">新建内联管道</Typography>
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleDelete}>
