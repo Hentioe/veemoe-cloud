@@ -27,7 +27,7 @@ module VeemoeCloud
         })
         json(context, space)
       else
-        json_error(context, "No Workspace found, id: #{id}", status_code: 404)
+        json_error(context, "No workspace found: #{id}", status_code: 404)
       end
     end
 
@@ -38,7 +38,7 @@ module VeemoeCloud
         Business.delete_workspace!(space)
         json(context, OK)
       else
-        json_error(context, "No Workspace found, id: #{id}", status_code: 404)
+        json_error(context, "No workspace found: #{id}", status_code: 404)
       end
     end
 
@@ -94,6 +94,22 @@ module VeemoeCloud
         json_success(context, uploaded: FileItem.new(file_path))
       end
     end
+
+    post "/workspaces/:space_name/pipes" do |context|
+      space_name = context.params.url["space_name"]
+      body = context.params.json
+
+      if space = Business.find_workspace_by_name(space_name)
+        pipe = Business.create_pipe!({
+          :workspace_id => space.id,
+          :name         => body["name"].as(String),
+          :query_params => body["query_params"].as(String),
+        })
+        json_success(context, pipe: pipe)
+      else
+        wnf
+      end
+    end
   end
 
   module VeemoeCloud::Router::ConsoleApi
@@ -111,6 +127,10 @@ module VeemoeCloud
 
     IGNORES              = [".", ".."]
     ILLEGAL_ACCESS_ERROR = "There is an illegal access path! Cannot contain '..'"
+
+    macro wnf
+      json_error(context, "Workspace not found: #{space_name}", status_code: 404)
+    end
 
     def self.find_files(context, res_path, space_name, path)
       if space = Business.find_workspace_by_name(space_name)
@@ -134,7 +154,7 @@ module VeemoeCloud
 
         json(context, {files: files})
       else
-        json_error(context, "Workspace not found: #{space_name}", status_code: 404)
+        wnf
       end
     end
 
@@ -156,7 +176,7 @@ module VeemoeCloud
         FileUtils.mkdir("#{rootpath}/#{name}")
         json(context, FileItem.new("#{rootpath}/#{name}"))
       else
-        json_error(context, "Workspace not found: #{space_name}", status_code: 404)
+        wnf
       end
     end
 
@@ -186,7 +206,7 @@ module VeemoeCloud
         FileUtils.mv(old_fullpath, new_fullpath)
         json(context, OK)
       else
-        json_error(context, "Workspace not found: #{space_name}", status_code: 404)
+        wnf
       end
     end
 
@@ -209,7 +229,7 @@ module VeemoeCloud
         FileUtils.rm_r(fullpath)
         json(context, OK)
       else
-        json_error(context, "Workspace not found: #{space_name}", status_code: 404)
+        wnf
       end
     end
   end

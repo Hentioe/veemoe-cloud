@@ -2,6 +2,14 @@ module VeemoeCloud::Model
   class Match < Jennifer::Model::Base
     with_timestamps
 
+    JSON.mapping(
+      id: Int32,
+      expression: String,
+      workspace_id: Int32,
+      created_at: Time?,
+      updated_at: Time?
+    )
+
     mapping(
       id: Primary32,
       # 表达式

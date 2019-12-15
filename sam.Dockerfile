@@ -9,7 +9,6 @@ ARG APP_HOME=/veemoe-cloud
 
 RUN mkdir "$APP_HOME" && \
     mkdir "$APP_HOME/db" && \
-    mkdir "$APP_HOME/data" && \
     ln -s "$APP_HOME/sam" /usr/local/bin/sam
 
 COPY bin/sam "$APP_HOME/sam"
@@ -17,3 +16,4 @@ COPY bin/sam "$APP_HOME/sam"
 WORKDIR $APP_HOME
 
 ENV VEEMOE_CLOUD_ENV=prod
+ENV VEEMOE_CLOUD_DATABASE_HOST=/data

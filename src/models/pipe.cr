@@ -2,6 +2,15 @@ module VeemoeCloud::Model
   class Pipe < Jennifer::Model::Base
     with_timestamps
 
+    JSON.mapping(
+      id: Int32,
+      name: String,
+      query_params: String,
+      workspace_id: Int32,
+      created_at: Time?,
+      updated_at: Time?
+    )
+
     mapping(
       id: Primary32,
       # 名称
