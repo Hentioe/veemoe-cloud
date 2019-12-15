@@ -1,5 +1,5 @@
 module VeemoeCloud
-  Router.def :console_api, res_path : String, options: {:prefix => "/console/api"} do
+  Router.def :console_api, options: {:prefix => "/console/api"} do
     get "/workspaces" do |context|
       json(context, Business.find_workspace_list)
     end
@@ -46,7 +46,7 @@ module VeemoeCloud
       space_name = context.params.url["space_name"]
       path = context.params.query["path"]? || "/"
 
-      find_files(context, res_path, space_name, path)
+      find_files(context, space_name, path)
     end
 
     post "/files/:space_name/directories" do |context|
@@ -56,7 +56,7 @@ module VeemoeCloud
       root = body["root"].as(String)
       name = body["name"].as(String)
 
-      create_directory(context, res_path, space_name, root, name)
+      create_directory(context, space_name, root, name)
     end
 
     put "/files/:space_name/rename" do |context|
@@ -67,14 +67,14 @@ module VeemoeCloud
       old_name = body["old_name"].as(String)
       new_name = body["new_name"].as(String)
 
-      rename_file(context, res_path, space_name, root, old_name, new_name)
+      rename_file(context, space_name, root, old_name, new_name)
     end
 
     delete "/files/:space_name" do |context|
       space_name = context.params.url["space_name"]
       path = context.params.query["path"]
 
-      delete_file(context, res_path, space_name, path)
+      delete_file(context, space_name, path)
     end
 
     post "/files/:space_name/upload" do |context|
@@ -83,7 +83,7 @@ module VeemoeCloud
       filename = context.params.body["name"].as(String)
       dir = context.params.body["dir"].as(String)
 
-      file_path = File.join [res_path, space_name, dir, filename]
+      file_path = File.join [SOURCE_PATH, space_name, dir, filename]
 
       if file_path.includes?("..")
         json_error(context, ILLEGAL_ACCESS_ERROR)
@@ -113,6 +113,8 @@ module VeemoeCloud
   end
 
   module VeemoeCloud::Router::ConsoleApi
+    SOURCE_PATH = VeemoeCloud.get_app_env("source_path")
+
     class FileItem
       JSON.mapping(
         is_directory: Bool,
@@ -132,9 +134,9 @@ module VeemoeCloud
       json_error(context, "Workspace not found: #{space_name}", status_code: 404)
     end
 
-    def self.find_files(context, res_path, space_name, path)
+    def self.find_files(context, space_name, path)
       if space = Business.find_workspace_by_name(space_name)
-        fullpath = "#{res_path}/#{space.name}/#{path}"
+        fullpath = "#{SOURCE_PATH}/#{space.name}/#{path}"
 
         unless File.exists?(fullpath)
           return json_error(context, "Path not found: #{path}", status_code: 404)
@@ -158,12 +160,12 @@ module VeemoeCloud
       end
     end
 
-    def self.create_directory(context, res_path, space_name, root, name)
+    def self.create_directory(context, space_name, root, name)
       if root.includes?("..")
         return json_error(context, ILLEGAL_ACCESS_ERROR)
       end
       if space = Business.find_workspace_by_name(space_name)
-        rootpath = "#{res_path}/#{space.name}/#{root}"
+        rootpath = "#{SOURCE_PATH}/#{space.name}/#{root}"
 
         unless File.exists?(rootpath)
           return json_error(context, "The root path not found: #{root}", status_code: 404)
@@ -180,9 +182,9 @@ module VeemoeCloud
       end
     end
 
-    def self.rename_file(context, res_path, space_name, root, old_name, new_name)
+    def self.rename_file(context, space_name, root, old_name, new_name)
       if space = Business.find_workspace_by_name(space_name)
-        rootpath = "#{res_path}/#{space.name}/#{root}"
+        rootpath = "#{SOURCE_PATH}/#{space.name}/#{root}"
 
         unless File.exists?(rootpath)
           return json_error(context, "The root path does not exist: #{root}", status_code: 404)
@@ -192,8 +194,8 @@ module VeemoeCloud
           return json_error(context, "The root path is not a directory: #{root}")
         end
 
-        old_fullpath = "#{res_path}/#{space.name}/#{root}/#{old_name}"
-        new_fullpath = "#{res_path}/#{space.name}/#{root}/#{new_name}"
+        old_fullpath = "#{SOURCE_PATH}/#{space.name}/#{root}/#{old_name}"
+        new_fullpath = "#{SOURCE_PATH}/#{space.name}/#{root}/#{new_name}"
 
         unless File.exists?(old_fullpath)
           return json_error(context, "The old path does not exist: #{root}/#{old_name}", status_code: 404)
@@ -210,13 +212,13 @@ module VeemoeCloud
       end
     end
 
-    def self.delete_file(context, res_path, space_name, path)
+    def self.delete_file(context, space_name, path)
       if path.starts_with?("/")
         return json_error(context, "The path must not start with '/'")
       end
 
       if space = Business.find_workspace_by_name(space_name)
-        fullpath = "#{res_path}/#{space.name}/#{path}"
+        fullpath = "#{SOURCE_PATH}/#{space.name}/#{path}"
 
         unless File.exists?(fullpath)
           return json_error(context, "Path does not exist: #{path}", status_code: 404)

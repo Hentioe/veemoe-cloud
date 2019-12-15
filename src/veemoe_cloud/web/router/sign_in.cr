@@ -2,11 +2,15 @@ require "jwt"
 
 module VeemoeCloud
   module Router::SignIn
+    ADMIN_EMAIL     = VeemoeCloud.get_app_env("admin_email")
+    ADMIN_PASSWORD  = VeemoeCloud.get_app_env("admin_password")
+    BASE_SECRET_KEY = VeemoeCloud.get_app_env("base_secret_key")
+
     SUCCESS_MSG     = "OK"
     AUTH_FAILED_MSG = "邮箱或密码错误。"
   end
 
-  Router.def :sign_in, email : String, password : String, secret_key do
+  Router.def :sign_in do
     post "/sign_in" do |env|
       data = env.params.json
 
@@ -15,7 +19,7 @@ module VeemoeCloud
       form_remember_me = data["remember_me"]?.as(Bool | Nil)
 
       body =
-        if email == form_email && password == form_password
+        if ADMIN_EMAIL == form_email && ADMIN_PASSWORD == form_password
           exp =
             if form_remember_me # 记住我，过期为 30 天
               Time.utc.to_unix + (60 * 60 * 24 * 30)
@@ -24,7 +28,7 @@ module VeemoeCloud
             end
 
           payload = {"user_id" => 1, "exp" => exp, "iat" => Time.utc.to_unix}
-          token = JWT.encode(payload, secret_key, JWT::Algorithm::HS256)
+          token = JWT.encode(payload, BASE_SECRET_KEY, JWT::Algorithm::HS256)
 
           {msg: SUCCESS_MSG, token: token}
         else

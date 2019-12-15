@@ -6,6 +6,8 @@ alias Workspace = VeemoeCloud::Business::Workspace
 alias Pipe = VeemoeCloud::Business::Pipe
 alias Match = VeemoeCloud::Business::Match
 
+SOURCE_PATH = VeemoeCloud.get_app_env("source_path")
+
 describe VeemoeCloud do
   describe VeemoeCloud::Router::Display do
     it "parse_conv" do
@@ -23,7 +25,7 @@ describe VeemoeCloud do
     begin
       Workspace.create!({:name => "demo", :description => "将要创建失败的空间。"})
     rescue e
-      e.message.should eq("Unable to create directory '_res/demo': File exists")
+      e.message.should eq("Unable to create directory '#{SOURCE_PATH}/demo': File exists")
       space = Workspace.find_by_name("demo")
       space.should be_falsey
     end
@@ -32,14 +34,14 @@ describe VeemoeCloud do
     space.should be_truthy
 
     Workspace.update!(space.not_nil!, {:name => "test-space1"})
-    File.exists?("_res/test-space1").should be_true
+    File.exists?("#{SOURCE_PATH}/test-space1").should be_true
 
     Workspace.delete!(space.not_nil!)
 
     space = Workspace.find_by_name("test-space1")
     space.should be_falsey
 
-    File.exists?("_res/test-space1").should be_false
+    File.exists?("#{SOURCE_PATH}/test-space1").should be_false
   end
 
   describe VeemoeCloud::Business::Style do

@@ -2,7 +2,7 @@ require "img_kit"
 require "digest"
 
 module VeemoeCloud
-  Router.def :display, _i : String, _o : String, options: {:prefix => "/display"} do
+  Router.def :display, options: {:prefix => "/display"} do
     get "/:workspace/:path" do |context|
       workspack, path = {epu("workspace"), epu("path")}
       full_path = i("#{workspack}/#{path}")
@@ -41,16 +41,19 @@ module VeemoeCloud
   module Router::Display
     extend self
 
+    INPUT_PATH  = VeemoeCloud.get_app_env("source_path")
+    OUTPUT_PATH = VeemoeCloud.get_app_env("cache_path")
+
     macro epu(name)
       context.params.url[{{name}}]
     end
 
     macro i(path)
-      "#{_i}/#{{{path}}}"
+      "#{INPUT_PATH}/#{{{path}}}"
     end
 
     macro o(path, hash, ext)
-      "#{_o}/#{{{hash}}}#{ext}"
+      "#{OUTPUT_PATH}/#{{{hash}}}#{ext}"
     end
 
     def sign(full_path, params)

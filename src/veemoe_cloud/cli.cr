@@ -16,14 +16,6 @@ module VeemoeCloud::CLI
             info:    "Log level",
             default: "info",
           },
-          res_path: {
-            info:    "Resource path",
-            default: "./_res",
-          },
-          cache_path: {
-            info:    "Cache path",
-            default: "./_cache",
-          }
         },
         options: {
           prod: {
