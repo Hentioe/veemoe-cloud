@@ -3,11 +3,12 @@ require "digest"
 
 module VeemoeCloud
   Router.def :display, options: {:prefix => "/display"} do
-    get "/:workspace/:path" do |context|
-      workspack, path = {epu("workspace"), epu("path")}
-      full_path = i("#{workspack}/#{path}")
+    get "/:space_name/*" do |context|
+      space_name = context.params.url["space_name"]
+      path = context.request.path.gsub("/display/#{space_name}/", "")
+      full_path = i("#{space_name}/#{path}")
       hash = sign(full_path, context.request.query)
-      ext = parse_conv(context.params.query["processes"]) || File.extname(full_path)
+      ext = parse_conv(context.params.query["pipe"]?) || File.extname(full_path)
       output = o(path, hash, ext)
       if File.exists?(output)
         last_modified = modification_time(output)
@@ -20,8 +21,8 @@ module VeemoeCloud
           send_file context, output
         end
       else
-        processes_expr = context.params.query["processes"] || ""
-        processor_pipe = processes(processes_expr)
+        pipe_expr = context.params.query["pipe"]? || ""
+        processor_pipe = pipe(pipe_expr)
         img = ImgKit::Image.new(full_path)
         processor_pipe.each do |processor, args|
           process_img(img, processor, args)
@@ -43,10 +44,6 @@ module VeemoeCloud
 
     INPUT_PATH  = VeemoeCloud.get_app_env("source_path")
     OUTPUT_PATH = VeemoeCloud.get_app_env("cache_path")
-
-    macro epu(name)
-      context.params.url[{{name}}]
-    end
 
     macro i(path)
       "#{INPUT_PATH}/#{{{path}}}"
@@ -107,7 +104,7 @@ module VeemoeCloud
     CROP_PROCESS_MATCH   = /crop\..+/
     CONV_PRECESS_MATCH   = /conv\.([^\/]+)/
 
-    def processes(expr)
+    def pipe(expr)
       pipe =
         Array(Tuple(Symbol, ResizeArgs) |
               Tuple(Symbol, BlurArgs) |
@@ -128,10 +125,12 @@ module VeemoeCloud
       pipe
     end
 
-    def parse_conv(query_params)
-      format = CONV_PRECESS_MATCH.match(query_params).try &.[1]
-      if format
-        ".#{format}"
+    def parse_conv(query_params : String?)
+      if query_params
+        format = CONV_PRECESS_MATCH.match(query_params).try &.[1]
+        if format
+          ".#{format}"
+        end
       end
     end
 
