@@ -4,18 +4,20 @@ ARG APP_HOME=/home/veemoe_cloud
 
 RUN mkdir "$APP_HOME" && \
     ln -s "$APP_HOME/veemoe_cloud" /usr/local/bin/veemoe_cloud && \
-    mkdir /_res && \
-    mkdir /_cache
+    mkdir /_source /_cache /data
 
 COPY bin $APP_HOME
 COPY static "$APP_HOME/static"
 
 WORKDIR $APP_HOME
 
-VOLUME ["/_cache"]
-
 EXPOSE 8080
 
 ENV VEEMOE_CLOUD_ENV=prod
+ENV VEEMOE_CLOUD_SOURCE_PATH=/_source
+ENV VEEMOE_CLOUD_CACHE_PATH=/_cache
+ENV VEEMOE_CLOUD_DATABASE_HOST=/data
 
-ENTRYPOINT veemoe_cloud --prod res_path=/_res cache_path=/_cache port=8080
+VOLUME [$VEEMOE_CLOUD_CACHE_PATH, $VEEMOE_CLOUD_DATABASE_HOST]
+
+ENTRYPOINT veemoe_cloud --prod port=8080

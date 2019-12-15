@@ -9,7 +9,7 @@
       "command": "crystal",
       "options": {
         "env": {
-          "VEEMOE_CLOUD_SOURCE_PATH": "./_res",
+          "VEEMOE_CLOUD_SOURCE_PATH": "./_source",
           "VEEMOE_CLOUD_CACHE_PATH": "./_cache",
           "VEEMOE_CLOUD_ADMIN_EMAIL": "cloud@veemoe.me",
           "VEEMOE_CLOUD_ADMIN_PASSWORD": "demo123",
